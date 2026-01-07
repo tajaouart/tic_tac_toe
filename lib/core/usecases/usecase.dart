@@ -1,5 +1,5 @@
-abstract class UseCase<Type, Params> {
-  Type call(Params params);
+abstract class UseCase<Result, Params> {
+  Result call(Params params);
 }
 
 class NoParams {

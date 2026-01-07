@@ -48,39 +48,48 @@ class _GamePageContent extends StatelessWidget {
             final gameState = state.gameState;
             final isGameOver = gameState.isGameOver;
 
-            return Column(
-              children: [
-                const Spacer(),
-                GameStatusBar(
-                  status: gameState.status,
-                  isAiThinking: state.isAiThinking,
-                ),
-                const SizedBox(height: 32),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: GameBoard(
-                    board: gameState.board,
-                    winningLine: gameState.winningLine,
-                    isEnabled: !isGameOver && !state.isAiThinking,
-                    onCellTap: (index) {
-                      context.read<GameBloc>().add(CellTapped(index));
-                    },
-                  ),
-                ),
-                const Spacer(),
-                if (isGameOver)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 32),
-                    child: FilledButton.icon(
-                      onPressed: () {
-                        context.read<GameBloc>().add(const GameReset());
-                      },
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('Play Again'),
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final maxBoardSize = constraints.maxHeight * 0.55;
+                final boardSize = maxBoardSize.clamp(200.0, 400.0);
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(),
+                    GameStatusBar(
+                      status: gameState.status,
+                      isAiThinking: state.isAiThinking,
                     ),
-                  ),
-                const SizedBox(height: 16),
-              ],
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: boardSize,
+                      height: boardSize,
+                      child: GameBoard(
+                        board: gameState.board,
+                        winningLine: gameState.winningLine,
+                        isEnabled: !isGameOver && !state.isAiThinking,
+                        onCellTap: (index) {
+                          context.read<GameBloc>().add(CellTapped(index));
+                        },
+                      ),
+                    ),
+                    const Spacer(),
+                    if (isGameOver)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: FilledButton.icon(
+                          onPressed: () {
+                            context.read<GameBloc>().add(const GameReset());
+                          },
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Play Again'),
+                        ),
+                      ),
+                    const SizedBox(height: 16),
+                  ],
+                );
+              },
             );
           },
         ),

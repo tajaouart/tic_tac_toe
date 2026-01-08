@@ -4,11 +4,14 @@ A Flutter implementation of the classic Tic-Tac-Toe game with Human vs CPU gamep
 
 ## Features
 
-- Play against an unbeatable AI opponent (minimax algorithm)
-- Clean, modern Material 3 UI
-- Dark mode support
-- Animated game interactions
-- Win detection with visual feedback
+- **3 Difficulty Levels**: Easy (random moves), Medium (smart play), Hard (unbeatable minimax)
+- **Player Profile**: Customizable player name
+- **Statistics Tracking**: Track your wins, losses, draws, and win streaks
+- **Persistent Storage**: All progress saved locally
+- **Settings Page**: Configure difficulty, theme, and player name
+- **Clean Material 3 UI**: Modern design with animations
+- **Dark Mode Support**: System, light, or dark theme
+- **Responsive Layout**: Works on mobile, tablet, and web
 
 ## Architecture
 
@@ -17,24 +20,28 @@ This project follows **Clean Architecture** principles with clear separation of 
 ```
 lib/
 ├── core/                 # Core utilities and abstractions
+│   ├── router/           # App navigation (go_router)
 │   └── usecases/         # UseCase base class
 ├── domain/               # Business logic layer
-│   ├── entities/         # Business entities (Player, Board, GameState)
+│   ├── entities/         # Business entities (Player, Board, GameState, etc.)
 │   ├── repositories/     # Repository interfaces
 │   └── usecases/         # Application use cases
 ├── data/                 # Data layer
-│   └── repositories/     # Repository implementations
+│   ├── repositories/     # Repository implementations
+│   └── services/         # Storage service (SharedPreferences)
 ├── presentation/         # UI layer
-│   ├── bloc/             # BLoC state management
-│   ├── pages/            # Screen widgets
+│   ├── bloc/             # BLoC/Cubit state management
+│   ├── pages/            # Screen widgets (Game, Settings, Statistics)
 │   └── widgets/          # Reusable UI components
 └── injection/            # Dependency injection setup
 ```
 
 ### Key Technologies
 
-- **State Management**: flutter_bloc
-- **Dependency Injection**: get_it + injectable
+- **State Management**: flutter_bloc (BLoC + Cubit)
+- **Dependency Injection**: get_it
+- **Navigation**: go_router
+- **Local Storage**: shared_preferences
 - **Architecture Pattern**: Clean Architecture with BLoC
 
 ## Getting Started
@@ -64,14 +71,28 @@ flutter run
 flutter test
 ```
 
-## Game Rules
+## Screens
 
-- Player (X) always goes first
-- Tap on an empty cell to make your move
-- The CPU (O) will respond automatically
-- First to get 3 in a row (horizontal, vertical, or diagonal) wins
-- If all cells are filled with no winner, it's a draw
+### Game Screen
+- Play against the CPU
+- See current difficulty level
+- Quick access to settings and statistics
+
+### Statistics Screen
+- View your game history
+- Track win rate and streaks
+- See total games played
+
+### Settings Screen
+- Change player name
+- Select difficulty level
+- Choose theme (System/Light/Dark)
+- Reset statistics
 
 ## AI Implementation
 
-The CPU opponent uses the **Minimax algorithm**, making it an unbeatable opponent. The AI evaluates all possible game states and chooses the optimal move to either win or force a draw.
+The CPU opponent has three difficulty modes:
+
+- **Easy**: Makes completely random moves
+- **Medium**: 50% optimal play, blocks wins, takes winning moves
+- **Hard**: Uses the **Minimax algorithm** for perfect play (unbeatable)

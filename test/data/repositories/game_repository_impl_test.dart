@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tic_tac_toe/data/repositories/game_repository_impl.dart';
 import 'package:tic_tac_toe/domain/entities/board.dart';
+import 'package:tic_tac_toe/domain/entities/difficulty.dart';
 import 'package:tic_tac_toe/domain/entities/game_state.dart';
 import 'package:tic_tac_toe/domain/entities/player.dart';
 
@@ -178,18 +179,18 @@ void main() {
     group('getAiMove', () {
       test('returns valid cell index', () {
         final board = Board.empty();
-        final move = repository.getAiMove(board, Player.o);
+        final move = repository.getAiMove(board, Player.o, Difficulty.hard);
 
         expect(move >= 0 && move < 9, true);
       });
 
-      test('blocks opponent winning move', () {
+      test('blocks opponent winning move on hard difficulty', () {
         var board = Board.empty();
         board = board.setCell(0, Player.x);
         board = board.setCell(1, Player.x);
         // X needs cell 2 to win, AI should block
 
-        final move = repository.getAiMove(board, Player.o);
+        final move = repository.getAiMove(board, Player.o, Difficulty.hard);
         expect(move, 2);
       });
 
@@ -201,7 +202,7 @@ void main() {
         board = board.setCell(8, Player.x);
         // O can win with cell 2
 
-        final move = repository.getAiMove(board, Player.o);
+        final move = repository.getAiMove(board, Player.o, Difficulty.hard);
         expect(move, 2);
       });
 
@@ -211,8 +212,15 @@ void main() {
           board = board.setCell(i, i % 2 == 0 ? Player.x : Player.o);
         }
 
-        final move = repository.getAiMove(board, Player.o);
+        final move = repository.getAiMove(board, Player.o, Difficulty.hard);
         expect(move, -1);
+      });
+
+      test('easy difficulty returns random valid move', () {
+        final board = Board.empty();
+        final move = repository.getAiMove(board, Player.o, Difficulty.easy);
+
+        expect(move >= 0 && move < 9, true);
       });
     });
   });

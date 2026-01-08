@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tic_tac_toe/injection/injection.dart';
 import 'package:tic_tac_toe/main.dart';
 
 void main() {
-  setUpAll(() {
-    configureDependencies();
+  setUpAll(() async {
+    SharedPreferences.setMockInitialValues({});
+    await configureDependencies();
   });
 
   testWidgets('App renders game page', (WidgetTester tester) async {
@@ -20,6 +22,6 @@ void main() {
     await tester.pumpWidget(const TicTacToeApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('Tic Tac Toe'), findsOneWidget);
+    expect(find.text("Player's Game"), findsOneWidget);
   });
 }

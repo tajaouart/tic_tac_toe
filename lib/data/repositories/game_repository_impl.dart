@@ -1,11 +1,14 @@
 import 'dart:math';
 
 import 'package:tic_tac_toe/domain/entities/board.dart';
+import 'package:tic_tac_toe/domain/entities/difficulty.dart';
 import 'package:tic_tac_toe/domain/entities/game_state.dart';
 import 'package:tic_tac_toe/domain/entities/player.dart';
 import 'package:tic_tac_toe/domain/repositories/game_repository.dart';
 
 class GameRepositoryImpl implements GameRepository {
+  final Random _random = Random();
+
   static const List<List<int>> _winningCombinations = [
     [0, 1, 2], // Top row
     [3, 4, 5], // Middle row
@@ -80,10 +83,53 @@ class GameRepositoryImpl implements GameRepository {
   }
 
   @override
-  int getAiMove(Board board, Player aiPlayer) {
+  int getAiMove(Board board, Player aiPlayer, Difficulty difficulty) {
     final emptyCells = board.emptyCells;
     if (emptyCells.isEmpty) return -1;
 
+    switch (difficulty) {
+      case Difficulty.easy:
+        return _getRandomMove(emptyCells);
+      case Difficulty.medium:
+        return _getMediumMove(board, aiPlayer, emptyCells);
+      case Difficulty.hard:
+        return _getMinimaxMove(board, aiPlayer, emptyCells);
+    }
+  }
+
+  int _getRandomMove(List<int> emptyCells) {
+    return emptyCells[_random.nextInt(emptyCells.length)];
+  }
+
+  int _getMediumMove(Board board, Player aiPlayer, List<int> emptyCells) {
+    // 50% chance to play optimal, 50% random
+    if (_random.nextBool()) {
+      return _getMinimaxMove(board, aiPlayer, emptyCells);
+    }
+
+    // Try to win if possible
+    final winningMove = _findWinningMove(board, aiPlayer);
+    if (winningMove != null) return winningMove;
+
+    // Block opponent if they can win
+    final blockingMove = _findWinningMove(board, aiPlayer.opponent);
+    if (blockingMove != null) return blockingMove;
+
+    // Otherwise random
+    return _getRandomMove(emptyCells);
+  }
+
+  int? _findWinningMove(Board board, Player player) {
+    for (final cell in board.emptyCells) {
+      final newBoard = board.setCell(cell, player);
+      if (_getWinner(newBoard) == player) {
+        return cell;
+      }
+    }
+    return null;
+  }
+
+  int _getMinimaxMove(Board board, Player aiPlayer, List<int> emptyCells) {
     int bestScore = -1000;
     int bestMove = emptyCells.first;
 

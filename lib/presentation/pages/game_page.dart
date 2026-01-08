@@ -73,61 +73,67 @@ class _GamePageContent extends StatelessWidget {
             final gameState = state.gameState;
             final isGameOver = gameState.isGameOver;
 
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                final maxBoardSize = constraints.maxHeight * 0.55;
-                final boardSize = maxBoardSize.clamp(200.0, 400.0);
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final maxBoardSize = constraints.maxHeight * 0.55;
+                    final boardSize = maxBoardSize.clamp(250.0, 380.0);
 
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Spacer(),
-                    BlocBuilder<SettingsCubit, SettingsState>(
-                      builder: (context, settingsState) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Text(
-                            'Difficulty: ${settingsState.settings.difficulty.displayName}',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                          ),
-                        );
-                      },
-                    ),
-                    GameStatusBar(
-                      status: gameState.status,
-                      isAiThinking: state.isAiThinking,
-                    ),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: boardSize,
-                      height: boardSize,
-                      child: GameBoard(
-                        board: gameState.board,
-                        winningLine: gameState.winningLine,
-                        isEnabled: !isGameOver && !state.isAiThinking,
-                        onCellTap: (index) {
-                          context.read<GameBloc>().add(CellTapped(index));
-                        },
-                      ),
-                    ),
-                    const Spacer(),
-                    if (isGameOver)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: FilledButton.icon(
-                          onPressed: () {
-                            context.read<GameBloc>().add(const GameReset());
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Spacer(),
+                        BlocBuilder<SettingsCubit, SettingsState>(
+                          builder: (context, settingsState) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Text(
+                                'Difficulty: ${settingsState.settings.difficulty.displayName}',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.outline,
+                                    ),
+                              ),
+                            );
                           },
-                          icon: const Icon(Icons.refresh),
-                          label: const Text('Play Again'),
                         ),
-                      ),
-                    const SizedBox(height: 16),
-                  ],
-                );
-              },
+                        GameStatusBar(
+                          status: gameState.status,
+                          isAiThinking: state.isAiThinking,
+                        ),
+                        const SizedBox(height: 24),
+                        SizedBox(
+                          width: boardSize,
+                          height: boardSize,
+                          child: GameBoard(
+                            board: gameState.board,
+                            winningLine: gameState.winningLine,
+                            isEnabled: !isGameOver && !state.isAiThinking,
+                            onCellTap: (index) {
+                              context.read<GameBloc>().add(CellTapped(index));
+                            },
+                          ),
+                        ),
+                        const Spacer(),
+                        if (isGameOver)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: FilledButton.icon(
+                              onPressed: () {
+                                context.read<GameBloc>().add(const GameReset());
+                              },
+                              icon: const Icon(Icons.refresh),
+                              label: const Text('Play Again'),
+                            ),
+                          ),
+                        const SizedBox(height: 16),
+                      ],
+                    );
+                  },
+                ),
+              ),
             );
           },
         ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/domain/entities/board.dart';
-import 'package:tic_tac_toe/presentation/widgets/game_cell.dart';
+import 'package:tic_tac_toe/presentation/widgets/game/game_cell.dart';
 
+/// Widget displaying the 3x3 Tic-Tac-Toe game board.
 class GameBoard extends StatelessWidget {
   final Board board;
   final List<int>? winningLine;

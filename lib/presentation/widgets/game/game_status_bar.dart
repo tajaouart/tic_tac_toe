@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/core/constants/app_constants.dart';
 import 'package:tic_tac_toe/domain/entities/game_state.dart';
 
+/// Widget displaying the current game status.
 class GameStatusBar extends StatelessWidget {
   final GameStatus status;
   final bool isAiThinking;
@@ -44,11 +46,11 @@ class GameStatusBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: AppConstants.defaultAnimationDuration),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
         color: _getStatusColor(context).withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppConstants.statusBarBorderRadius),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -67,7 +69,7 @@ class GameStatusBar extends StatelessWidget {
           Text(
             _statusText,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: AppConstants.statusBarFontSize,
               fontWeight: FontWeight.w600,
               color: _getStatusColor(context),
             ),

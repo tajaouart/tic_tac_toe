@@ -1,24 +1,20 @@
 import 'dart:math';
 
+import 'package:injectable/injectable.dart';
+import 'package:tic_tac_toe/core/constants/app_constants.dart';
 import 'package:tic_tac_toe/domain/entities/board.dart';
 import 'package:tic_tac_toe/domain/entities/difficulty.dart';
 import 'package:tic_tac_toe/domain/entities/game_state.dart';
 import 'package:tic_tac_toe/domain/entities/player.dart';
 import 'package:tic_tac_toe/domain/repositories/game_repository.dart';
 
+/// Implementation of [GameRepository] providing game logic.
+///
+/// Handles move validation, game status checking, and AI opponent logic
+/// using the minimax algorithm for hard difficulty.
+@LazySingleton(as: GameRepository)
 class GameRepositoryImpl implements GameRepository {
   final Random _random = Random();
-
-  static const List<List<int>> _winningCombinations = [
-    [0, 1, 2], // Top row
-    [3, 4, 5], // Middle row
-    [6, 7, 8], // Bottom row
-    [0, 3, 6], // Left column
-    [1, 4, 7], // Middle column
-    [2, 5, 8], // Right column
-    [0, 4, 8], // Diagonal
-    [2, 4, 6], // Anti-diagonal
-  ];
 
   @override
   GameState makeMove(GameState currentState, int cellIndex) {
@@ -57,7 +53,7 @@ class GameRepositoryImpl implements GameRepository {
 
   @override
   List<int>? getWinningLine(Board board) {
-    for (final combination in _winningCombinations) {
+    for (final combination in WinningCombinations.all) {
       final a = board.getCell(combination[0]);
       final b = board.getCell(combination[1]);
       final c = board.getCell(combination[2]);
@@ -70,7 +66,7 @@ class GameRepositoryImpl implements GameRepository {
   }
 
   Player _getWinner(Board board) {
-    for (final combination in _winningCombinations) {
+    for (final combination in WinningCombinations.all) {
       final a = board.getCell(combination[0]);
       final b = board.getCell(combination[1]);
       final c = board.getCell(combination[2]);
@@ -129,8 +125,14 @@ class GameRepositoryImpl implements GameRepository {
     return null;
   }
 
+  /// Finds the best move using the minimax algorithm.
+  ///
+  /// The minimax algorithm evaluates all possible game states to find the
+  /// optimal move. It assumes both players play optimally and returns
+  /// the move that maximizes the AI's chances of winning while minimizing
+  /// the opponent's chances.
   int _getMinimaxMove(Board board, Player aiPlayer, List<int> emptyCells) {
-    int bestScore = -1000;
+    int bestScore = AppConstants.minimaxInitialBestScore;
     int bestMove = emptyCells.first;
 
     for (final cell in emptyCells) {
@@ -146,16 +148,25 @@ class GameRepositoryImpl implements GameRepository {
     return bestMove;
   }
 
+  /// Recursive minimax evaluation function.
+  ///
+  /// [board] - Current board state to evaluate
+  /// [depth] - Current search depth (used to prefer faster wins)
+  /// [isMaximizing] - True if evaluating AI's turn, false for human
+  /// [aiPlayer] - The player the AI is controlling
+  ///
+  /// Returns a score where positive values favor AI, negative favor human.
   int _minimax(Board board, int depth, bool isMaximizing, Player aiPlayer) {
     final winner = _getWinner(board);
     final humanPlayer = aiPlayer.opponent;
 
-    if (winner == aiPlayer) return 10 - depth;
-    if (winner == humanPlayer) return depth - 10;
-    if (board.isFull) return 0;
+    // Terminal state evaluation - prefer faster wins/slower losses
+    if (winner == aiPlayer) return AppConstants.minimaxWinScore - depth;
+    if (winner == humanPlayer) return depth + AppConstants.minimaxLoseScore;
+    if (board.isFull) return AppConstants.minimaxDrawScore;
 
     if (isMaximizing) {
-      int bestScore = -1000;
+      int bestScore = AppConstants.minimaxInitialBestScore;
       for (final cell in board.emptyCells) {
         final newBoard = board.setCell(cell, aiPlayer);
         final score = _minimax(newBoard, depth + 1, false, aiPlayer);
@@ -163,7 +174,7 @@ class GameRepositoryImpl implements GameRepository {
       }
       return bestScore;
     } else {
-      int bestScore = 1000;
+      int bestScore = AppConstants.minimaxInitialWorstScore;
       for (final cell in board.emptyCells) {
         final newBoard = board.setCell(cell, humanPlayer);
         final score = _minimax(newBoard, depth + 1, true, aiPlayer);

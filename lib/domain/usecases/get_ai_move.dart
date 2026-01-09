@@ -1,9 +1,11 @@
+import 'package:injectable/injectable.dart';
 import 'package:tic_tac_toe/core/usecases/usecase.dart';
 import 'package:tic_tac_toe/domain/entities/board.dart';
 import 'package:tic_tac_toe/domain/entities/difficulty.dart';
 import 'package:tic_tac_toe/domain/entities/player.dart';
 import 'package:tic_tac_toe/domain/repositories/game_repository.dart';
 
+@lazySingleton
 class GetAiMove implements UseCase<int, GetAiMoveParams> {
   final GameRepository repository;
 

@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+import 'package:tic_tac_toe/core/constants/app_constants.dart';
 import 'package:tic_tac_toe/core/usecases/usecase.dart';
 import 'package:tic_tac_toe/domain/entities/game_state.dart';
 import 'package:tic_tac_toe/domain/entities/player.dart';
@@ -7,13 +9,22 @@ import 'package:tic_tac_toe/domain/usecases/make_move.dart';
 import 'package:tic_tac_toe/domain/usecases/reset_game.dart';
 import 'package:tic_tac_toe/presentation/bloc/game_event.dart';
 import 'package:tic_tac_toe/presentation/bloc/game_state_bloc.dart';
-import 'package:tic_tac_toe/presentation/bloc/settings_cubit.dart';
 
+/// Callback type for recording game results.
+typedef GameResultCallback = void Function(GameStatus status);
+
+/// BLoC responsible for managing game state and logic.
+///
+/// This BLoC is decoupled from SettingsCubit - difficulty is passed through
+/// events and game results are communicated via callbacks.
+@injectable
 class GameBloc extends Bloc<GameEvent, GameBlocState> {
   final MakeMove makeMove;
   final ResetGame resetGame;
   final GetAiMove getAiMove;
-  final SettingsCubit settingsCubit;
+
+  /// Callback invoked when a game ends with a result.
+  GameResultCallback? onGameResult;
 
   static const Player humanPlayer = Player.x;
   static const Player aiPlayer = Player.o;
@@ -22,11 +33,11 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
     required this.makeMove,
     required this.resetGame,
     required this.getAiMove,
-    required this.settingsCubit,
   }) : super(const GameInitial()) {
     on<CellTapped>(_onCellTapped);
     on<GameReset>(_onGameReset);
     on<AiMoveRequested>(_onAiMoveRequested);
+    on<GameResultRecorded>(_onGameResultRecorded);
 
     add(const GameReset());
   }
@@ -51,9 +62,9 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
     emit(GameInProgress(gameState: newGameState));
 
     if (newGameState.isGameOver) {
-      _recordGameResult(newGameState.status);
+      _notifyGameResult(newGameState.status);
     } else if (!newGameState.isHumanTurn) {
-      add(const AiMoveRequested());
+      add(AiMoveRequested(difficulty: event.difficulty));
     }
   }
 
@@ -68,13 +79,14 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
 
     emit(currentState.copyWith(isAiThinking: true));
 
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(
+      const Duration(milliseconds: AppConstants.aiThinkingDelay),
+    );
 
-    final difficulty = settingsCubit.state.settings.difficulty;
     final aiMoveIndex = getAiMove(GetAiMoveParams(
       board: currentState.gameState.board,
       aiPlayer: aiPlayer,
-      difficulty: difficulty,
+      difficulty: event.difficulty,
     ));
 
     if (aiMoveIndex == -1) return;
@@ -87,24 +99,19 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
     emit(GameInProgress(gameState: newGameState, isAiThinking: false));
 
     if (newGameState.isGameOver) {
-      _recordGameResult(newGameState.status);
+      _notifyGameResult(newGameState.status);
     }
   }
 
-  void _recordGameResult(GameStatus status) {
-    switch (status) {
-      case GameStatus.xWins:
-        settingsCubit.recordWin();
-        break;
-      case GameStatus.oWins:
-        settingsCubit.recordLoss();
-        break;
-      case GameStatus.draw:
-        settingsCubit.recordDraw();
-        break;
-      case GameStatus.playing:
-        break;
-    }
+  void _notifyGameResult(GameStatus status) {
+    onGameResult?.call(status);
+  }
+
+  void _onGameResultRecorded(
+    GameResultRecorded event,
+    Emitter<GameBlocState> emit,
+  ) {
+    // This event is for external tracking - no state change needed
   }
 
   void _onGameReset(

@@ -17,7 +17,7 @@ class GameRepositoryImpl implements GameRepository {
   final Random _random = Random();
 
   @override
-  GameState makeMove(GameState currentState, int cellIndex) {
+  Game makeMove(Game currentState, int cellIndex) {
     if (currentState.isGameOver) return currentState;
     if (!currentState.board.isCellEmpty(cellIndex)) return currentState;
 
@@ -29,7 +29,7 @@ class GameRepositoryImpl implements GameRepository {
     final status = checkGameStatus(newBoard);
     final winningLine = status != GameStatus.playing ? getWinningLine(newBoard) : null;
 
-    return GameState(
+    return Game(
       board: newBoard,
       currentPlayer: currentState.currentPlayer.opponent,
       status: status,
@@ -38,8 +38,8 @@ class GameRepositoryImpl implements GameRepository {
   }
 
   @override
-  GameState resetGame() {
-    return GameState.initial();
+  Game resetGame() {
+    return Game.initial();
   }
 
   @override

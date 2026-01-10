@@ -1,17 +1,18 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:tic_tac_toe/domain/entities/player.dart';
 
-class Board extends Equatable {
-  final List<Player> cells;
+part 'board.freezed.dart';
 
-  const Board({required this.cells});
+@freezed
+class Board with _$Board {
+  const Board._();
+
+  const factory Board({
+    required List<Player> cells,
+  }) = _Board;
 
   factory Board.empty() {
     return Board(cells: List.filled(9, Player.none));
-  }
-
-  Board copyWith({List<Player>? cells}) {
-    return Board(cells: cells ?? List.from(this.cells));
   }
 
   Player getCell(int index) {
@@ -32,7 +33,7 @@ class Board extends Equatable {
 
   List<int> get emptyCells {
     final empty = <int>[];
-    for (int i = 0; i < 9; i++) {
+    for (var i = 0; i < 9; i++) {
       if (cells[i] == Player.none) {
         empty.add(i);
       }
@@ -41,7 +42,4 @@ class Board extends Equatable {
   }
 
   bool get isFull => emptyCells.isEmpty;
-
-  @override
-  List<Object?> get props => [cells];
 }

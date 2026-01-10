@@ -4,8 +4,8 @@ import 'package:tic_tac_toe/domain/entities/game_state.dart';
 import 'package:tic_tac_toe/domain/entities/player.dart';
 
 abstract class GameRepository {
-  GameState makeMove(GameState currentState, int cellIndex);
-  GameState resetGame();
+  Game makeMove(Game currentState, int cellIndex);
+  Game resetGame();
   int getAiMove(Board board, Player aiPlayer, Difficulty difficulty);
   GameStatus checkGameStatus(Board board);
   List<int>? getWinningLine(Board board);

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:tic_tac_toe/domain/entities/game_state.dart' as domain;
+import 'package:tic_tac_toe/domain/entities/game_state.dart';
 
 part 'game_state_bloc.freezed.dart';
 
@@ -8,7 +8,7 @@ class GameBlocState with _$GameBlocState {
   const factory GameBlocState.initial() = GameInitial;
 
   const factory GameBlocState.inProgress({
-    required domain.GameState gameState,
+    required Game game,
     @Default(false) bool isAiThinking,
   }) = GameInProgress;
 }

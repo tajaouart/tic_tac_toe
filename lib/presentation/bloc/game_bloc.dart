@@ -49,21 +49,21 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
     final currentState = state;
     if (currentState is! GameInProgress) return;
     if (currentState.isAiThinking) return;
-    if (currentState.gameState.isGameOver) return;
-    if (!currentState.gameState.isHumanTurn) return;
+    if (currentState.game.isGameOver) return;
+    if (!currentState.game.isHumanTurn) return;
 
-    final newGameState = makeMove(MakeMoveParams(
-      currentState: currentState.gameState,
+    final newGame = makeMove(MakeMoveParams(
+      currentState: currentState.game,
       cellIndex: event.index,
     ));
 
-    if (newGameState == currentState.gameState) return;
+    if (newGame == currentState.game) return;
 
-    emit(GameBlocState.inProgress(gameState: newGameState));
+    emit(GameBlocState.inProgress(game: newGame));
 
-    if (newGameState.isGameOver) {
-      _notifyGameResult(newGameState.status);
-    } else if (!newGameState.isHumanTurn) {
+    if (newGame.isGameOver) {
+      _notifyGameResult(newGame.status);
+    } else if (!newGame.isHumanTurn) {
       add(AiMoveRequested(difficulty: event.difficulty));
     }
   }
@@ -74,8 +74,8 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
   ) async {
     final currentState = state;
     if (currentState is! GameInProgress) return;
-    if (currentState.gameState.isGameOver) return;
-    if (currentState.gameState.isHumanTurn) return;
+    if (currentState.game.isGameOver) return;
+    if (currentState.game.isHumanTurn) return;
 
     emit(currentState.copyWith(isAiThinking: true));
 
@@ -84,22 +84,22 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
     );
 
     final aiMoveIndex = getAiMove(GetAiMoveParams(
-      board: currentState.gameState.board,
+      board: currentState.game.board,
       aiPlayer: aiPlayer,
       difficulty: event.difficulty,
     ));
 
     if (aiMoveIndex == -1) return;
 
-    final newGameState = makeMove(MakeMoveParams(
-      currentState: currentState.gameState,
+    final newGame = makeMove(MakeMoveParams(
+      currentState: currentState.game,
       cellIndex: aiMoveIndex,
     ));
 
-    emit(GameBlocState.inProgress(gameState: newGameState, isAiThinking: false));
+    emit(GameBlocState.inProgress(game: newGame, isAiThinking: false));
 
-    if (newGameState.isGameOver) {
-      _notifyGameResult(newGameState.status);
+    if (newGame.isGameOver) {
+      _notifyGameResult(newGame.status);
     }
   }
 
@@ -118,7 +118,7 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
     GameReset event,
     Emitter<GameBlocState> emit,
   ) {
-    final initialState = resetGame(const NoParams());
-    emit(GameBlocState.inProgress(gameState: initialState));
+    final initialGame = resetGame(const NoParams());
+    emit(GameBlocState.inProgress(game: initialGame));
   }
 }

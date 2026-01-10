@@ -20,19 +20,17 @@ mixin _$GameBlocState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(domain.GameState gameState, bool isAiThinking)
-    inProgress,
+    required TResult Function(Game game, bool isAiThinking) inProgress,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(domain.GameState gameState, bool isAiThinking)?
-    inProgress,
+    TResult? Function(Game game, bool isAiThinking)? inProgress,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(domain.GameState gameState, bool isAiThinking)? inProgress,
+    TResult Function(Game game, bool isAiThinking)? inProgress,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -119,8 +117,7 @@ class _$GameInitialImpl implements GameInitial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(domain.GameState gameState, bool isAiThinking)
-    inProgress,
+    required TResult Function(Game game, bool isAiThinking) inProgress,
   }) {
     return initial();
   }
@@ -129,8 +126,7 @@ class _$GameInitialImpl implements GameInitial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(domain.GameState gameState, bool isAiThinking)?
-    inProgress,
+    TResult? Function(Game game, bool isAiThinking)? inProgress,
   }) {
     return initial?.call();
   }
@@ -139,7 +135,7 @@ class _$GameInitialImpl implements GameInitial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(domain.GameState gameState, bool isAiThinking)? inProgress,
+    TResult Function(Game game, bool isAiThinking)? inProgress,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -191,7 +187,9 @@ abstract class _$$GameInProgressImplCopyWith<$Res> {
     $Res Function(_$GameInProgressImpl) then,
   ) = __$$GameInProgressImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({domain.GameState gameState, bool isAiThinking});
+  $Res call({Game game, bool isAiThinking});
+
+  $GameCopyWith<$Res> get game;
 }
 
 /// @nodoc
@@ -207,13 +205,13 @@ class __$$GameInProgressImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? gameState = null, Object? isAiThinking = null}) {
+  $Res call({Object? game = null, Object? isAiThinking = null}) {
     return _then(
       _$GameInProgressImpl(
-        gameState: null == gameState
-            ? _value.gameState
-            : gameState // ignore: cast_nullable_to_non_nullable
-                  as domain.GameState,
+        game: null == game
+            ? _value.game
+            : game // ignore: cast_nullable_to_non_nullable
+                  as Game,
         isAiThinking: null == isAiThinking
             ? _value.isAiThinking
             : isAiThinking // ignore: cast_nullable_to_non_nullable
@@ -221,25 +219,32 @@ class __$$GameInProgressImplCopyWithImpl<$Res>
       ),
     );
   }
+
+  /// Create a copy of GameBlocState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $GameCopyWith<$Res> get game {
+    return $GameCopyWith<$Res>(_value.game, (value) {
+      return _then(_value.copyWith(game: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$GameInProgressImpl implements GameInProgress {
-  const _$GameInProgressImpl({
-    required this.gameState,
-    this.isAiThinking = false,
-  });
+  const _$GameInProgressImpl({required this.game, this.isAiThinking = false});
 
   @override
-  final domain.GameState gameState;
+  final Game game;
   @override
   @JsonKey()
   final bool isAiThinking;
 
   @override
   String toString() {
-    return 'GameBlocState.inProgress(gameState: $gameState, isAiThinking: $isAiThinking)';
+    return 'GameBlocState.inProgress(game: $game, isAiThinking: $isAiThinking)';
   }
 
   @override
@@ -247,14 +252,13 @@ class _$GameInProgressImpl implements GameInProgress {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GameInProgressImpl &&
-            (identical(other.gameState, gameState) ||
-                other.gameState == gameState) &&
+            (identical(other.game, game) || other.game == game) &&
             (identical(other.isAiThinking, isAiThinking) ||
                 other.isAiThinking == isAiThinking));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, gameState, isAiThinking);
+  int get hashCode => Object.hash(runtimeType, game, isAiThinking);
 
   /// Create a copy of GameBlocState
   /// with the given fields replaced by the non-null parameter values.
@@ -271,31 +275,29 @@ class _$GameInProgressImpl implements GameInProgress {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(domain.GameState gameState, bool isAiThinking)
-    inProgress,
+    required TResult Function(Game game, bool isAiThinking) inProgress,
   }) {
-    return inProgress(gameState, isAiThinking);
+    return inProgress(game, isAiThinking);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(domain.GameState gameState, bool isAiThinking)?
-    inProgress,
+    TResult? Function(Game game, bool isAiThinking)? inProgress,
   }) {
-    return inProgress?.call(gameState, isAiThinking);
+    return inProgress?.call(game, isAiThinking);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(domain.GameState gameState, bool isAiThinking)? inProgress,
+    TResult Function(Game game, bool isAiThinking)? inProgress,
     required TResult orElse(),
   }) {
     if (inProgress != null) {
-      return inProgress(gameState, isAiThinking);
+      return inProgress(game, isAiThinking);
     }
     return orElse();
   }
@@ -334,11 +336,11 @@ class _$GameInProgressImpl implements GameInProgress {
 
 abstract class GameInProgress implements GameBlocState {
   const factory GameInProgress({
-    required final domain.GameState gameState,
+    required final Game game,
     final bool isAiThinking,
   }) = _$GameInProgressImpl;
 
-  domain.GameState get gameState;
+  Game get game;
   bool get isAiThinking;
 
   /// Create a copy of GameBlocState

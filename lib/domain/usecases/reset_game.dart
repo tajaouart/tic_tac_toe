@@ -4,13 +4,13 @@ import 'package:tic_tac_toe/domain/entities/game_state.dart';
 import 'package:tic_tac_toe/domain/repositories/game_repository.dart';
 
 @lazySingleton
-class ResetGame implements UseCase<GameState, NoParams> {
+class ResetGame implements UseCase<Game, NoParams> {
   final GameRepository repository;
 
   ResetGame(this.repository);
 
   @override
-  GameState call(NoParams params) {
+  Game call(NoParams params) {
     return repository.resetGame();
   }
 }

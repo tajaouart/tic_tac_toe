@@ -60,8 +60,8 @@ class _GamePageContent extends StatelessWidget {
           builder: (context, state) {
             return state.when(
               initial: () => const Center(child: CircularProgressIndicator()),
-              inProgress: (gameState, isAiThinking) => _GameBody(
-                gameState: gameState,
+              inProgress: (game, isAiThinking) => _GameBody(
+                game: game,
                 isAiThinking: isAiThinking,
               ),
             );
@@ -101,17 +101,17 @@ class _GamePageContent extends StatelessWidget {
 }
 
 class _GameBody extends StatelessWidget {
-  final GameState gameState;
+  final Game game;
   final bool isAiThinking;
 
   const _GameBody({
-    required this.gameState,
+    required this.game,
     required this.isAiThinking,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isGameOver = gameState.isGameOver;
+    final isGameOver = game.isGameOver;
 
     return Center(
       child: ConstrainedBox(
@@ -130,7 +130,7 @@ class _GameBody extends StatelessWidget {
                 const Spacer(),
                 const DifficultyIndicator(),
                 GameStatusBar(
-                  status: gameState.status,
+                  status: game.status,
                   isAiThinking: isAiThinking,
                 ),
                 const SizedBox(height: 24),
@@ -153,8 +153,8 @@ class _GameBody extends StatelessWidget {
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, settingsState) {
           return GameBoard(
-            board: gameState.board,
-            winningLine: gameState.winningLine,
+            board: game.board,
+            winningLine: game.winningLine,
             isEnabled: !isGameOver && !isAiThinking,
             onCellTap: (index) {
               context.read<GameBloc>().add(CellTapped(

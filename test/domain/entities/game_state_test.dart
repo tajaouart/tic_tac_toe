@@ -4,9 +4,9 @@ import 'package:tic_tac_toe/domain/entities/game_state.dart';
 import 'package:tic_tac_toe/domain/entities/player.dart';
 
 void main() {
-  group('GameState', () {
+  group('Game', () {
     test('initial state has empty board and X as current player', () {
-      final state = GameState.initial();
+      final state = Game.initial();
 
       expect(state.board.emptyCells.length, 9);
       expect(state.currentPlayer, Player.x);
@@ -15,13 +15,13 @@ void main() {
     });
 
     test('isGameOver returns false when playing', () {
-      final state = GameState.initial();
+      final state = Game.initial();
 
       expect(state.isGameOver, false);
     });
 
     test('isGameOver returns true when X wins', () {
-      final state = GameState(
+      final state = Game(
         board: Board.empty(),
         currentPlayer: Player.x,
         status: GameStatus.xWins,
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('isGameOver returns true when O wins', () {
-      final state = GameState(
+      final state = Game(
         board: Board.empty(),
         currentPlayer: Player.x,
         status: GameStatus.oWins,
@@ -41,7 +41,7 @@ void main() {
     });
 
     test('isGameOver returns true on draw', () {
-      final state = GameState(
+      final state = Game(
         board: Board.empty(),
         currentPlayer: Player.x,
         status: GameStatus.draw,
@@ -51,13 +51,13 @@ void main() {
     });
 
     test('isHumanTurn returns true when current player is X', () {
-      final state = GameState.initial();
+      final state = Game.initial();
 
       expect(state.isHumanTurn, true);
     });
 
     test('isHumanTurn returns false when current player is O', () {
-      final state = GameState(
+      final state = Game(
         board: Board.empty(),
         currentPlayer: Player.o,
         status: GameStatus.playing,

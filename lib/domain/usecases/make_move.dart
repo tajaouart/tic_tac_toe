@@ -4,19 +4,19 @@ import 'package:tic_tac_toe/domain/entities/game_state.dart';
 import 'package:tic_tac_toe/domain/repositories/game_repository.dart';
 
 @lazySingleton
-class MakeMove implements UseCase<GameState, MakeMoveParams> {
+class MakeMove implements UseCase<Game, MakeMoveParams> {
   final GameRepository repository;
 
   MakeMove(this.repository);
 
   @override
-  GameState call(MakeMoveParams params) {
+  Game call(MakeMoveParams params) {
     return repository.makeMove(params.currentState, params.cellIndex);
   }
 }
 
 class MakeMoveParams {
-  final GameState currentState;
+  final Game currentState;
   final int cellIndex;
 
   const MakeMoveParams({

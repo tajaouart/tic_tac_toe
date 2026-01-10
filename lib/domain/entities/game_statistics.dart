@@ -1,19 +1,18 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class GameStatistics extends Equatable {
-  final int wins;
-  final int losses;
-  final int draws;
-  final int currentStreak;
-  final int bestStreak;
+part 'game_statistics.freezed.dart';
 
-  const GameStatistics({
-    this.wins = 0,
-    this.losses = 0,
-    this.draws = 0,
-    this.currentStreak = 0,
-    this.bestStreak = 0,
-  });
+@freezed
+class GameStatistics with _$GameStatistics {
+  const GameStatistics._();
+
+  const factory GameStatistics({
+    @Default(0) int wins,
+    @Default(0) int losses,
+    @Default(0) int draws,
+    @Default(0) int currentStreak,
+    @Default(0) int bestStreak,
+  }) = _GameStatistics;
 
   int get totalGames => wins + losses + draws;
 
@@ -24,32 +23,23 @@ class GameStatistics extends Equatable {
 
   GameStatistics recordWin() {
     final newStreak = currentStreak + 1;
-    return GameStatistics(
+    return copyWith(
       wins: wins + 1,
-      losses: losses,
-      draws: draws,
       currentStreak: newStreak,
       bestStreak: newStreak > bestStreak ? newStreak : bestStreak,
     );
   }
 
   GameStatistics recordLoss() {
-    return GameStatistics(
-      wins: wins,
+    return copyWith(
       losses: losses + 1,
-      draws: draws,
       currentStreak: 0,
-      bestStreak: bestStreak,
     );
   }
 
   GameStatistics recordDraw() {
-    return GameStatistics(
-      wins: wins,
-      losses: losses,
+    return copyWith(
       draws: draws + 1,
-      currentStreak: currentStreak,
-      bestStreak: bestStreak,
     );
   }
 
@@ -72,7 +62,4 @@ class GameStatistics extends Equatable {
       bestStreak: json['bestStreak'] ?? 0,
     );
   }
-
-  @override
-  List<Object?> get props => [wins, losses, draws, currentStreak, bestStreak];
 }

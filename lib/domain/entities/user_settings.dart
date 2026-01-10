@@ -1,33 +1,19 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:tic_tac_toe/domain/entities/difficulty.dart';
 
-class UserSettings extends Equatable {
-  final String playerName;
-  final Difficulty difficulty;
-  final ThemeMode themeMode;
-  final bool soundEnabled;
+part 'user_settings.freezed.dart';
 
-  const UserSettings({
-    this.playerName = 'Player',
-    this.difficulty = Difficulty.hard,
-    this.themeMode = ThemeMode.system,
-    this.soundEnabled = true,
-  });
+@freezed
+class UserSettings with _$UserSettings {
+  const UserSettings._();
 
-  UserSettings copyWith({
-    String? playerName,
-    Difficulty? difficulty,
-    ThemeMode? themeMode,
-    bool? soundEnabled,
-  }) {
-    return UserSettings(
-      playerName: playerName ?? this.playerName,
-      difficulty: difficulty ?? this.difficulty,
-      themeMode: themeMode ?? this.themeMode,
-      soundEnabled: soundEnabled ?? this.soundEnabled,
-    );
-  }
+  const factory UserSettings({
+    @Default('Player') String playerName,
+    @Default(Difficulty.hard) Difficulty difficulty,
+    @Default(ThemeMode.system) ThemeMode themeMode,
+    @Default(true) bool soundEnabled,
+  }) = _UserSettings;
 
   Map<String, dynamic> toJson() {
     return {
@@ -46,7 +32,4 @@ class UserSettings extends Equatable {
       soundEnabled: json['soundEnabled'] ?? true,
     );
   }
-
-  @override
-  List<Object?> get props => [playerName, difficulty, themeMode, soundEnabled];
 }

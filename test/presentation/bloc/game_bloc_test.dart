@@ -40,7 +40,7 @@ void main() {
 
       expect(bloc.state, isA<GameInProgress>());
       final state = bloc.state as GameInProgress;
-      expect(state.gameState.board.emptyCells.length, 9);
+      expect(state.game.board.emptyCells.length, 9);
     });
 
     test('emits updated state when CellTapped is processed', () async {
@@ -51,7 +51,7 @@ void main() {
 
       expect(bloc.state, isA<GameInProgress>());
       final state = bloc.state as GameInProgress;
-      expect(state.gameState.board.emptyCells.length, lessThan(9));
+      expect(state.game.board.emptyCells.length, lessThan(9));
     });
 
     test('ignores cell tap when AI is thinking', () async {
@@ -87,7 +87,7 @@ void main() {
       // We don't know the exact outcome, but if the game ended,
       // the callback should have been invoked
       final state = bloc.state as GameInProgress;
-      if (state.gameState.isGameOver) {
+      if (state.game.isGameOver) {
         expect(recordedStatus, isNotNull);
       }
     });

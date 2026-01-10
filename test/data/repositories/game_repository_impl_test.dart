@@ -15,7 +15,7 @@ void main() {
   group('GameRepositoryImpl', () {
     group('makeMove', () {
       test('places player marker and switches turn', () {
-        final initialState = GameState.initial();
+        final initialState = Game.initial();
         final newState = repository.makeMove(initialState, 0);
 
         expect(newState.board.getCell(0), Player.x);
@@ -23,7 +23,7 @@ void main() {
       });
 
       test('ignores move on occupied cell', () {
-        var state = GameState.initial();
+        var state = Game.initial();
         state = repository.makeMove(state, 0);
         final newState = repository.makeMove(state, 0);
 
@@ -32,7 +32,7 @@ void main() {
       });
 
       test('ignores move when game is over', () {
-        final state = GameState(
+        final state = Game(
           board: Board.empty(),
           currentPlayer: Player.x,
           status: GameStatus.xWins,
@@ -43,7 +43,7 @@ void main() {
       });
 
       test('detects X win', () {
-        var state = GameState.initial();
+        var state = Game.initial();
         // X plays: 0, 1, 2 (top row)
         state = repository.makeMove(state, 0); // X at 0
         state = repository.makeMove(state, 3); // O at 3
@@ -56,7 +56,7 @@ void main() {
       });
 
       test('detects O win', () {
-        var state = GameState.initial();
+        var state = Game.initial();
         state = repository.makeMove(state, 0); // X at 0
         state = repository.makeMove(state, 3); // O at 3
         state = repository.makeMove(state, 1); // X at 1
@@ -69,7 +69,7 @@ void main() {
       });
 
       test('detects draw', () {
-        var state = GameState.initial();
+        var state = Game.initial();
         // X O X
         // X X O
         // O X O

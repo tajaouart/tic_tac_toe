@@ -1,7 +1,3 @@
-/// Application-wide constants.
-///
-/// Centralizes magic numbers and configuration values for easier maintenance
-/// and testing.
 abstract final class AppConstants {
   // Storage keys
   static const String settingsStorageKey = 'user_settings';

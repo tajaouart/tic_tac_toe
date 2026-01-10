@@ -1,19 +1,12 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude:
+    - "**/*.freezed.dart"
+    - "**/*.config.dart"
+    - "**/*.g.dart"
+
 linter:
   rules:
     prefer_single_quotes: true
-    avoid_print: true
-    prefer_const_constructors: true
-    prefer_const_declarations: true
-    prefer_final_locals: true
-    unnecessary_lambdas: true
-    avoid_unnecessary_containers: true
-    sized_box_for_whitespace: true
-    use_key_in_widget_constructors: true
-
-analyzer:
-  exclude:
-    - "**/*.g.dart"
-    - "**/*.freezed.dart"
-    - "**/*.config.dart"
+    require_trailing_commas: true

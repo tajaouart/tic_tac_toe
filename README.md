@@ -56,24 +56,18 @@ lib/
 - Flutter SDK (3.10.4 or higher)
 - Dart SDK (3.x)
 
-### Installation
+### Build
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   flutter pub get
-   ```
+```bash
+./build.sh
+```
 
-### Running the App
+This will run: clean, pub get, code generation, analyze, and tests.
+
+### Run
 
 ```bash
 flutter run
-```
-
-### Running Tests
-
-```bash
-flutter test
 ```
 
 ## Screens

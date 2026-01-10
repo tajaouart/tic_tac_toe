@@ -20,6 +20,8 @@ This project follows **Clean Architecture** principles with clear separation of 
 ```
 lib/
 ├── core/                 # Core utilities and abstractions
+│   ├── constants/        # App-wide constants
+│   ├── error/            # Error handling (failures, exceptions, result)
 │   ├── router/           # App navigation (go_router)
 │   └── usecases/         # UseCase base class
 ├── domain/               # Business logic layer
@@ -30,18 +32,21 @@ lib/
 │   ├── repositories/     # Repository implementations
 │   └── services/         # Storage service (SharedPreferences)
 ├── presentation/         # UI layer
-│   ├── bloc/             # BLoC/Cubit state management
+│   ├── bloc/             # BLoC/Cubit state management (with Freezed)
 │   ├── pages/            # Screen widgets (Game, Settings, Statistics)
 │   └── widgets/          # Reusable UI components
-└── injection/            # Dependency injection setup
+├── shared/               # Shared utilities
+│   └── utils/            # Extensions, constants
+└── injection/            # Dependency injection setup (get_it + injectable)
 ```
 
 ### Key Technologies
 
-- **State Management**: flutter_bloc (BLoC + Cubit)
-- **Dependency Injection**: get_it
+- **State Management**: flutter_bloc (BLoC + Cubit) with Freezed
+- **Dependency Injection**: get_it + injectable
 - **Navigation**: go_router
 - **Local Storage**: shared_preferences
+- **Code Generation**: freezed, injectable_generator
 - **Architecture Pattern**: Clean Architecture with BLoC
 
 ## Getting Started

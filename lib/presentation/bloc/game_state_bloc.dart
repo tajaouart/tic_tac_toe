@@ -1,36 +1,14 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:tic_tac_toe/domain/entities/game_state.dart' as domain;
 
-abstract class GameBlocState extends Equatable {
-  const GameBlocState();
+part 'game_state_bloc.freezed.dart';
 
-  @override
-  List<Object?> get props => [];
-}
+@freezed
+class GameBlocState with _$GameBlocState {
+  const factory GameBlocState.initial() = GameInitial;
 
-class GameInitial extends GameBlocState {
-  const GameInitial();
-}
-
-class GameInProgress extends GameBlocState {
-  final domain.GameState gameState;
-  final bool isAiThinking;
-
-  const GameInProgress({
-    required this.gameState,
-    this.isAiThinking = false,
-  });
-
-  @override
-  List<Object?> get props => [gameState, isAiThinking];
-
-  GameInProgress copyWith({
-    domain.GameState? gameState,
-    bool? isAiThinking,
-  }) {
-    return GameInProgress(
-      gameState: gameState ?? this.gameState,
-      isAiThinking: isAiThinking ?? this.isAiThinking,
-    );
-  }
+  const factory GameBlocState.inProgress({
+    required domain.GameState gameState,
+    @Default(false) bool isAiThinking,
+  }) = GameInProgress;
 }

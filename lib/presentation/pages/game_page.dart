@@ -58,13 +58,12 @@ class _GamePageContent extends StatelessWidget {
       body: SafeArea(
         child: BlocBuilder<GameBloc, GameBlocState>(
           builder: (context, state) {
-            if (state is! GameInProgress) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            return _GameBody(
-              gameState: state.gameState,
-              isAiThinking: state.isAiThinking,
+            return state.when(
+              initial: () => const Center(child: CircularProgressIndicator()),
+              inProgress: (gameState, isAiThinking) => _GameBody(
+                gameState: gameState,
+                isAiThinking: isAiThinking,
+              ),
             );
           },
         ),

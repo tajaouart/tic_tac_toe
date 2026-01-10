@@ -1,5 +1,5 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format width=80
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -39,14 +39,14 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i1045.StorageService(gh<_i460.SharedPreferences>()),
     );
     gh.lazySingleton<_i807.GameRepository>(() => _i471.GameRepositoryImpl());
+    gh.lazySingleton<_i1021.ResetGame>(
+      () => _i1021.ResetGame(gh<_i807.GameRepository>()),
+    );
     gh.lazySingleton<_i294.GetAiMove>(
       () => _i294.GetAiMove(gh<_i807.GameRepository>()),
     );
     gh.lazySingleton<_i107.MakeMove>(
       () => _i107.MakeMove(gh<_i807.GameRepository>()),
-    );
-    gh.lazySingleton<_i1021.ResetGame>(
-      () => _i1021.ResetGame(gh<_i807.GameRepository>()),
     );
     gh.factory<_i713.GameBloc>(
       () => _i713.GameBloc(

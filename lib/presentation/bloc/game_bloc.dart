@@ -33,7 +33,7 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
     required this.makeMove,
     required this.resetGame,
     required this.getAiMove,
-  }) : super(const GameInitial()) {
+  }) : super(const GameBlocState.initial()) {
     on<CellTapped>(_onCellTapped);
     on<GameReset>(_onGameReset);
     on<AiMoveRequested>(_onAiMoveRequested);
@@ -59,7 +59,7 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
 
     if (newGameState == currentState.gameState) return;
 
-    emit(GameInProgress(gameState: newGameState));
+    emit(GameBlocState.inProgress(gameState: newGameState));
 
     if (newGameState.isGameOver) {
       _notifyGameResult(newGameState.status);
@@ -96,7 +96,7 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
       cellIndex: aiMoveIndex,
     ));
 
-    emit(GameInProgress(gameState: newGameState, isAiThinking: false));
+    emit(GameBlocState.inProgress(gameState: newGameState, isAiThinking: false));
 
     if (newGameState.isGameOver) {
       _notifyGameResult(newGameState.status);
@@ -119,6 +119,6 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
     Emitter<GameBlocState> emit,
   ) {
     final initialState = resetGame(const NoParams());
-    emit(GameInProgress(gameState: initialState));
+    emit(GameBlocState.inProgress(gameState: initialState));
   }
 }

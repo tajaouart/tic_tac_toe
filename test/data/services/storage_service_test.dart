@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tic_tac_toe/core/constants/app_constants.dart';
-import 'package:tic_tac_toe/core/error/result.dart';
 import 'package:tic_tac_toe/data/services/storage_service.dart';
 import 'package:tic_tac_toe/domain/entities/difficulty.dart';
 import 'package:tic_tac_toe/domain/entities/game_statistics.dart';
@@ -34,7 +33,7 @@ void main() {
       });
 
       test('returns stored settings when data exists', () {
-        final settings = const UserSettings(
+        const settings = UserSettings(
           playerName: 'TestPlayer',
           difficulty: Difficulty.easy,
         );
@@ -94,7 +93,7 @@ void main() {
       });
 
       test('returns stored statistics when data exists', () {
-        final stats = const GameStatistics(wins: 5, losses: 3, draws: 2);
+        const stats = GameStatistics(wins: 5, losses: 3, draws: 2);
         when(() => mockPrefs.getString(AppConstants.statisticsStorageKey))
             .thenReturn(jsonEncode(stats.toJson()));
 

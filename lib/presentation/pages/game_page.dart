@@ -156,6 +156,7 @@ class _GameBody extends StatelessWidget {
             board: game.board,
             winningLine: game.winningLine,
             isEnabled: !isGameOver && !isAiThinking,
+            isAiThinking: isAiThinking,
             onCellTap: (index) {
               context.read<GameBloc>().add(CellTapped(
                 index: index,

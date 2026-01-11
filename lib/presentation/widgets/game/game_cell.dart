@@ -186,14 +186,116 @@ class _PlayerSymbol extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Text(
-      player.symbol,
-      key: ValueKey(player),
-      style: TextStyle(
-        fontSize: AppConstants.cellFontSize,
-        fontWeight: FontWeight.bold,
-        color: player == Player.x ? colorScheme.primary : colorScheme.secondary,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.maxWidth * 0.6;
+        return SizedBox(
+          width: size,
+          height: size,
+          child: CustomPaint(
+            key: ValueKey(player),
+            painter: player == Player.x
+                ? _XPainter(color: colorScheme.primary)
+                : _OPainter(color: colorScheme.secondary),
+          ),
+        );
+      },
     );
+  }
+}
+
+/// Custom painter for beautiful X symbol
+class _XPainter extends CustomPainter {
+  final Color color;
+
+  _XPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = size.width * 0.15
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+
+    // Add shadow
+    final shadowPaint = Paint()
+      ..color = color.withValues(alpha: 0.3)
+      ..strokeWidth = size.width * 0.15
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
+    final padding = size.width * 0.1;
+
+    // Draw shadow first
+    canvas.drawLine(
+      Offset(padding + 2, padding + 2),
+      Offset(size.width - padding + 2, size.height - padding + 2),
+      shadowPaint,
+    );
+    canvas.drawLine(
+      Offset(size.width - padding + 2, padding + 2),
+      Offset(padding + 2, size.height - padding + 2),
+      shadowPaint,
+    );
+
+    // Draw X lines
+    canvas.drawLine(
+      Offset(padding, padding),
+      Offset(size.width - padding, size.height - padding),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(size.width - padding, padding),
+      Offset(padding, size.height - padding),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _XPainter oldDelegate) {
+    return oldDelegate.color != color;
+  }
+}
+
+/// Custom painter for beautiful O symbol
+class _OPainter extends CustomPainter {
+  final Color color;
+
+  _OPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width / 2) * 0.85;
+    final strokeWidth = size.width * 0.15;
+
+    // Add shadow
+    final shadowPaint = Paint()
+      ..color = color.withValues(alpha: 0.3)
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
+    canvas.drawCircle(
+      Offset(center.dx + 2, center.dy + 2),
+      radius - strokeWidth / 2,
+      shadowPaint,
+    );
+
+    // Draw circle
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawCircle(center, radius - strokeWidth / 2, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _OPainter oldDelegate) {
+    return oldDelegate.color != color;
   }
 }

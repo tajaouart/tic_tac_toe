@@ -14,6 +14,7 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../data/repositories/game_repository_impl.dart' as _i471;
+import '../data/services/sound_service.dart' as _i228;
 import '../data/services/storage_service.dart' as _i1045;
 import '../domain/repositories/game_repository.dart' as _i807;
 import '../domain/usecases/get_ai_move.dart' as _i294;
@@ -35,6 +36,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.prefs,
       preResolve: true,
     );
+    gh.lazySingleton<_i228.SoundService>(() => _i228.SoundService());
     gh.lazySingleton<_i1045.StorageService>(
       () => _i1045.StorageService(gh<_i460.SharedPreferences>()),
     );

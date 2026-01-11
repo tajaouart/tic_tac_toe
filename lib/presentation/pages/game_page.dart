@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tic_tac_toe/core/constants/app_constants.dart';
+import 'package:tic_tac_toe/data/services/sound_service.dart';
 import 'package:tic_tac_toe/domain/entities/game_state.dart';
 import 'package:tic_tac_toe/injection/injection.dart';
 import 'package:tic_tac_toe/presentation/bloc/game_bloc.dart';
@@ -32,12 +33,16 @@ class GamePage extends StatelessWidget {
 
   void _recordGameResult(BuildContext context, GameStatus status) {
     final settingsCubit = context.read<SettingsCubit>();
+    final soundService = getIt<SoundService>();
+
     switch (status) {
       case GameStatus.xWins:
         settingsCubit.recordWin();
+        soundService.playSuccess();
         break;
       case GameStatus.oWins:
         settingsCubit.recordLoss();
+        soundService.playLost();
         break;
       case GameStatus.draw:
         settingsCubit.recordDraw();
@@ -152,12 +157,17 @@ class _GameBody extends StatelessWidget {
       height: boardSize,
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, settingsState) {
+          // Sync sound service with settings
+          final soundService = getIt<SoundService>();
+          soundService.setEnabled(settingsState.settings.soundEnabled);
+
           return GameBoard(
             board: game.board,
             winningLine: game.winningLine,
             isEnabled: !isGameOver && !isAiThinking,
             isAiThinking: isAiThinking,
             onCellTap: (index) {
+              soundService.playTap();
               context.read<GameBloc>().add(CellTapped(
                 index: index,
                 difficulty: settingsState.settings.difficulty,

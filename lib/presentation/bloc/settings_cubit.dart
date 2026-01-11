@@ -92,11 +92,18 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   Future<void> _saveSettings(UserSettings newSettings) async {
-    emit(state.copyWith(settings: newSettings));
+    final previousSettings = state.settings;
+    emit(state.copyWith(settings: newSettings, isLoading: true));
 
     final result = await _storageService.saveSettings(newSettings);
     if (result.isFailure) {
-      emit(state.copyWith(errorMessage: 'Failed to save settings'));
+      emit(state.copyWith(
+        settings: previousSettings,
+        isLoading: false,
+        errorMessage: 'Failed to save settings',
+      ));
+    } else {
+      emit(state.copyWith(isLoading: false));
     }
   }
 
@@ -116,11 +123,18 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   Future<void> _saveStatistics(GameStatistics newStats) async {
-    emit(state.copyWith(statistics: newStats));
+    final previousStats = state.statistics;
+    emit(state.copyWith(statistics: newStats, isLoading: true));
 
     final result = await _storageService.saveStatistics(newStats);
     if (result.isFailure) {
-      emit(state.copyWith(errorMessage: 'Failed to save statistics'));
+      emit(state.copyWith(
+        statistics: previousStats,
+        isLoading: false,
+        errorMessage: 'Failed to save statistics',
+      ));
+    } else {
+      emit(state.copyWith(isLoading: false));
     }
   }
 

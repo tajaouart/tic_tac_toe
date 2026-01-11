@@ -18,18 +18,51 @@ class UserSettings with _$UserSettings {
   Map<String, dynamic> toJson() {
     return {
       'playerName': playerName,
-      'difficulty': difficulty.index,
-      'themeMode': themeMode.index,
+      'difficulty': difficulty.name,
+      'themeMode': themeMode.name,
       'soundEnabled': soundEnabled,
     };
   }
 
   factory UserSettings.fromJson(Map<String, dynamic> json) {
     return UserSettings(
-      playerName: json['playerName'] ?? 'Player',
-      difficulty: Difficulty.values[json['difficulty'] ?? 2],
-      themeMode: ThemeMode.values[json['themeMode'] ?? 0],
+      playerName: _parsePlayerName(json['playerName']),
+      difficulty: _parseDifficulty(json['difficulty']),
+      themeMode: _parseThemeMode(json['themeMode']),
       soundEnabled: json['soundEnabled'] ?? true,
     );
+  }
+
+  static String _parsePlayerName(dynamic value) {
+    if (value is String && value.isNotEmpty && value.length <= 20) {
+      return value;
+    }
+    return 'Player';
+  }
+
+  static Difficulty _parseDifficulty(dynamic value) {
+    if (value is String) {
+      return Difficulty.values.firstWhere(
+        (e) => e.name == value,
+        orElse: () => Difficulty.hard,
+      );
+    }
+    if (value is int && value >= 0 && value < Difficulty.values.length) {
+      return Difficulty.values[value];
+    }
+    return Difficulty.hard;
+  }
+
+  static ThemeMode _parseThemeMode(dynamic value) {
+    if (value is String) {
+      return ThemeMode.values.firstWhere(
+        (e) => e.name == value,
+        orElse: () => ThemeMode.system,
+      );
+    }
+    if (value is int && value >= 0 && value < ThemeMode.values.length) {
+      return ThemeMode.values[value];
+    }
+    return ThemeMode.system;
   }
 }

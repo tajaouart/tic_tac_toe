@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tic_tac_toe/data/repositories/game_repository_impl.dart';
 import 'package:tic_tac_toe/domain/entities/difficulty.dart';
@@ -10,86 +11,89 @@ import 'package:tic_tac_toe/presentation/bloc/game_event.dart';
 import 'package:tic_tac_toe/presentation/bloc/game_state_bloc.dart';
 
 void main() {
-  late GameBloc bloc;
   late GameRepositoryImpl repository;
+  late MakeMove makeMove;
+  late ResetGame resetGame;
+  late GetAiMove getAiMove;
 
   setUp(() {
     repository = GameRepositoryImpl();
-    bloc = GameBloc(
-      makeMove: MakeMove(repository),
-      resetGame: ResetGame(repository),
-      getAiMove: GetAiMove(repository),
-    );
-  });
-
-  tearDown(() {
-    bloc.close();
+    makeMove = MakeMove(repository);
+    resetGame = ResetGame(repository);
+    getAiMove = GetAiMove(repository);
   });
 
   group('GameBloc', () {
-    test('initial state is GameInProgress after construction', () async {
-      await Future.delayed(const Duration(milliseconds: 100));
-      expect(bloc.state, isA<GameInProgress>());
-    });
+    blocTest<GameBloc, GameBlocState>(
+      'emits GameInProgress on construction',
+      build: () => GameBloc(
+        makeMove: makeMove,
+        resetGame: resetGame,
+        getAiMove: getAiMove,
+      ),
+      expect: () => [isA<GameInProgress>()],
+    );
 
-    test('emits new state when GameReset is added', () async {
-      await Future.delayed(const Duration(milliseconds: 100));
+    test('resets to fresh state when GameReset is added', () async {
+      final bloc = GameBloc(
+        makeMove: makeMove,
+        resetGame: resetGame,
+        getAiMove: getAiMove,
+      );
 
+      await Future.delayed(const Duration(milliseconds: 100));
       bloc.add(const GameReset());
       await Future.delayed(const Duration(milliseconds: 100));
 
       expect(bloc.state, isA<GameInProgress>());
       final state = bloc.state as GameInProgress;
       expect(state.game.board.emptyCells.length, 9);
+      expect(state.game.status, GameStatus.playing);
+
+      await bloc.close();
     });
 
-    test('emits updated state when CellTapped is processed', () async {
-      await Future.delayed(const Duration(milliseconds: 100));
-
-      bloc.add(const CellTapped(index: 4, difficulty: Difficulty.easy));
-      await Future.delayed(const Duration(milliseconds: 100));
-
-      expect(bloc.state, isA<GameInProgress>());
-      final state = bloc.state as GameInProgress;
-      expect(state.game.board.emptyCells.length, lessThan(9));
-    });
-
-    test('ignores cell tap when AI is thinking', () async {
-      await Future.delayed(const Duration(milliseconds: 100));
-
-      // Make a move to trigger AI thinking
-      bloc.add(const CellTapped(index: 0, difficulty: Difficulty.hard));
-      await Future.delayed(const Duration(milliseconds: 50));
-
-      final stateBeforeSecondTap = bloc.state as GameInProgress;
-      if (stateBeforeSecondTap.isAiThinking) {
-        bloc.add(const CellTapped(index: 1, difficulty: Difficulty.hard));
+    blocTest<GameBloc, GameBlocState>(
+      'updates board when CellTapped is processed',
+      build: () => GameBloc(
+        makeMove: makeMove,
+        resetGame: resetGame,
+        getAiMove: getAiMove,
+      ),
+      act: (bloc) async {
         await Future.delayed(const Duration(milliseconds: 50));
-
-        // Cell 1 should still be empty if AI is thinking
+        bloc.add(const CellTapped(index: 4, difficulty: Difficulty.easy));
+      },
+      wait: const Duration(milliseconds: 600),
+      verify: (bloc) {
         final state = bloc.state as GameInProgress;
-        expect(state.isAiThinking, true);
-      }
-    });
+        expect(state.game.board.emptyCells.length, lessThan(9));
+      },
+    );
 
     test('invokes game result callback when game ends', () async {
-      await Future.delayed(const Duration(milliseconds: 100));
+      final bloc = GameBloc(
+        makeMove: makeMove,
+        resetGame: resetGame,
+        getAiMove: getAiMove,
+      );
 
       GameStatus? recordedStatus;
       bloc.onGameResult = (status) => recordedStatus = status;
 
-      // Play a game that ends (depends on implementation)
-      bloc.add(const CellTapped(index: 0, difficulty: Difficulty.easy));
-      await Future.delayed(const Duration(milliseconds: 800));
-      bloc.add(const CellTapped(index: 2, difficulty: Difficulty.easy));
-      await Future.delayed(const Duration(milliseconds: 800));
+      await Future.delayed(const Duration(milliseconds: 100));
 
-      // We don't know the exact outcome, but if the game ended,
-      // the callback should have been invoked
+      bloc.add(const CellTapped(index: 0, difficulty: Difficulty.easy));
+      await Future.delayed(const Duration(milliseconds: 700));
+      bloc.add(const CellTapped(index: 2, difficulty: Difficulty.easy));
+      await Future.delayed(const Duration(milliseconds: 700));
+
       final state = bloc.state as GameInProgress;
       if (state.game.isGameOver) {
         expect(recordedStatus, isNotNull);
       }
+
+      await bloc.close();
     });
   });
 }

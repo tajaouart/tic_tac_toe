@@ -2,6 +2,10 @@
 
 A Flutter implementation of the classic Tic-Tac-Toe game with Human vs CPU gameplay.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tajaouart/tic_tac_toe/main/demo.png" alt="Tic Tac Toe Demo" width="300"/>
+</p>
+
 ## Features
 
 - **3 Difficulty Levels**: Easy (random moves), Medium (smart play), Hard (unbeatable minimax)

@@ -11,7 +11,7 @@ void main() {
   });
 
   group('TicTacToeApp', () {
-    testWidgets('renders game page with player name', (WidgetTester tester) async {
+    testWidgets('renders game page with player info', (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
 
@@ -23,10 +23,11 @@ void main() {
       await tester.pumpWidget(const TicTacToeApp());
       await tester.pumpAndSettle();
 
-      expect(find.text("Player's Game"), findsOneWidget);
+      // Check for player name display
+      expect(find.text('Player'), findsOneWidget);
     });
 
-    testWidgets('displays difficulty indicator', (WidgetTester tester) async {
+    testWidgets('displays difficulty badge', (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
 
@@ -38,10 +39,11 @@ void main() {
       await tester.pumpWidget(const TicTacToeApp());
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('Difficulty:'), findsOneWidget);
+      // Default difficulty is Hard
+      expect(find.text('Hard'), findsOneWidget);
     });
 
-    testWidgets('displays status bar with "Your turn"', (WidgetTester tester) async {
+    testWidgets('displays status with "Your turn"', (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
 
@@ -56,7 +58,7 @@ void main() {
       expect(find.text('Your turn'), findsOneWidget);
     });
 
-    testWidgets('has navigation buttons in app bar', (WidgetTester tester) async {
+    testWidgets('has navigation buttons', (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1080, 1920);
       tester.view.devicePixelRatio = 1.0;
 
@@ -68,10 +70,10 @@ void main() {
       await tester.pumpWidget(const TicTacToeApp());
       await tester.pumpAndSettle();
 
-      // Check for icon buttons
-      expect(find.byIcon(Icons.refresh), findsOneWidget);
-      expect(find.byIcon(Icons.bar_chart), findsOneWidget);
-      expect(find.byIcon(Icons.settings), findsOneWidget);
+      // Check for icon buttons with new icons
+      expect(find.byIcon(Icons.refresh_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.emoji_events_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
     });
 
     testWidgets('navigates to settings page', (WidgetTester tester) async {
@@ -86,7 +88,7 @@ void main() {
       await tester.pumpWidget(const TicTacToeApp());
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byIcon(Icons.settings));
+      await tester.tap(find.byIcon(Icons.settings_outlined));
       await tester.pumpAndSettle();
 
       expect(find.text('Settings'), findsOneWidget);

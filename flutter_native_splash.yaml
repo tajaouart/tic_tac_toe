@@ -1,22 +1,22 @@
 flutter_native_splash:
-  # Background color for splash screen (white to match original logo)
-  color: "#FFFFFF"
+  # Background color for splash screen (dark to match logo)
+  color: "#1A1A2E"
 
   # Dark mode background
   color_dark: "#1A1A2E"
 
-  # Logo image (original logo)
-  image: assets/images/logo_splash.png
+  # Logo image (circular logo - same as app icon)
+  image: assets/images/app_icon.png
 
   # Branding image at bottom (optional)
   # branding: assets/images/branding.png
 
   # Android 12+ settings
   android_12:
-    color: "#FFFFFF"
+    color: "#1A1A2E"
     color_dark: "#1A1A2E"
-    image: assets/images/logo_splash.png
-    icon_background_color: "#FFFFFF"
+    image: assets/images/app_icon.png
+    icon_background_color: "#1A1A2E"
     icon_background_color_dark: "#1A1A2E"
 
   # iOS settings

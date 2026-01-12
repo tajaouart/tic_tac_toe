@@ -10,21 +10,16 @@ import 'package:tic_tac_toe/domain/usecases/reset_game.dart';
 import 'package:tic_tac_toe/presentation/bloc/game_event.dart';
 import 'package:tic_tac_toe/presentation/bloc/game_state_bloc.dart';
 
-/// Callback type for recording game results.
-typedef GameResultCallback = void Function(GameStatus status);
-
 /// BLoC responsible for managing game state and logic.
 ///
 /// This BLoC is decoupled from SettingsCubit - difficulty is passed through
-/// events and game results are communicated via callbacks.
+/// events and game results are communicated via state changes.
+/// Use BlocListener to react to game end states.
 @injectable
 class GameBloc extends Bloc<GameEvent, GameBlocState> {
   final MakeMove makeMove;
   final ResetGame resetGame;
   final GetAiMove getAiMove;
-
-  /// Callback invoked when a game ends with a result.
-  GameResultCallback? onGameResult;
 
   static const Player humanPlayer = Player.x;
   static const Player aiPlayer = Player.o;
@@ -61,9 +56,7 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
 
     emit(GameBlocState.inProgress(game: newGame));
 
-    if (newGame.isGameOver) {
-      _notifyGameResult(newGame.status);
-    } else if (!newGame.isHumanTurn) {
+    if (!newGame.isGameOver && !newGame.isHumanTurn) {
       add(AiMoveRequested(difficulty: event.difficulty));
     }
   }
@@ -97,21 +90,17 @@ class GameBloc extends Bloc<GameEvent, GameBlocState> {
     ));
 
     emit(GameBlocState.inProgress(game: newGame, isAiThinking: false));
-
-    if (newGame.isGameOver) {
-      _notifyGameResult(newGame.status);
-    }
-  }
-
-  void _notifyGameResult(GameStatus status) {
-    onGameResult?.call(status);
   }
 
   void _onGameResultRecorded(
     GameResultRecorded event,
     Emitter<GameBlocState> emit,
   ) {
-    // This event is for external tracking - no state change needed
+    final currentState = state;
+    if (currentState is! GameInProgress) return;
+
+    // Mark result as recorded to prevent duplicate recordings
+    emit(currentState.copyWith(resultRecorded: true));
   }
 
   void _onGameReset(

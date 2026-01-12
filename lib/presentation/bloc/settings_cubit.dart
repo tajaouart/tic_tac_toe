@@ -1,52 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tic_tac_toe/data/services/storage_service.dart';
 import 'package:tic_tac_toe/domain/entities/difficulty.dart';
 import 'package:tic_tac_toe/domain/entities/game_statistics.dart';
 import 'package:tic_tac_toe/domain/entities/user_settings.dart';
 
+part 'settings_cubit.freezed.dart';
+
 /// State for the settings cubit.
-class SettingsState extends Equatable {
-  final UserSettings settings;
-  final GameStatistics statistics;
-  final bool isLoading;
-  final String? errorMessage;
+@freezed
+class SettingsState with _$SettingsState {
+  const SettingsState._();
 
-  const SettingsState({
-    required this.settings,
-    required this.statistics,
-    this.isLoading = false,
-    this.errorMessage,
-  });
-
-  factory SettingsState.initial() {
-    return const SettingsState(
-      settings: UserSettings(),
-      statistics: GameStatistics(),
-    );
-  }
-
-  SettingsState copyWith({
-    UserSettings? settings,
-    GameStatistics? statistics,
-    bool? isLoading,
+  const factory SettingsState({
+    @Default(UserSettings()) UserSettings settings,
+    @Default(GameStatistics()) GameStatistics statistics,
+    @Default(false) bool isLoading,
     String? errorMessage,
-  }) {
-    return SettingsState(
-      settings: settings ?? this.settings,
-      statistics: statistics ?? this.statistics,
-      isLoading: isLoading ?? this.isLoading,
-      errorMessage: errorMessage,
-    );
-  }
+  }) = _SettingsState;
 
   /// Clears any error message.
   SettingsState clearError() => copyWith(errorMessage: null);
-
-  @override
-  List<Object?> get props => [settings, statistics, isLoading, errorMessage];
 }
 
 /// Cubit responsible for managing user settings and game statistics.
@@ -57,7 +33,7 @@ class SettingsState extends Equatable {
 class SettingsCubit extends Cubit<SettingsState> {
   final StorageService _storageService;
 
-  SettingsCubit(this._storageService) : super(SettingsState.initial()) {
+  SettingsCubit(this._storageService) : super(const SettingsState()) {
     _loadData();
   }
 

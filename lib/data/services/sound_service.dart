@@ -2,13 +2,26 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:injectable/injectable.dart';
 
 /// Service for playing game sound effects.
+///
+/// Accepts optional AudioPlayer instances for testing purposes.
 @lazySingleton
 class SoundService {
-  final AudioPlayer _tapPlayer = AudioPlayer();
-  final AudioPlayer _successPlayer = AudioPlayer();
-  final AudioPlayer _lostPlayer = AudioPlayer();
+  final AudioPlayer _tapPlayer;
+  final AudioPlayer _successPlayer;
+  final AudioPlayer _lostPlayer;
 
   bool _isEnabled = true;
+
+  /// Whether sounds are currently enabled.
+  bool get isEnabled => _isEnabled;
+
+  SoundService({
+    AudioPlayer? tapPlayer,
+    AudioPlayer? successPlayer,
+    AudioPlayer? lostPlayer,
+  })  : _tapPlayer = tapPlayer ?? AudioPlayer(),
+        _successPlayer = successPlayer ?? AudioPlayer(),
+        _lostPlayer = lostPlayer ?? AudioPlayer();
 
   /// Sets whether sounds are enabled.
   void setEnabled(bool enabled) {

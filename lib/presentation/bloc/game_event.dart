@@ -39,12 +39,8 @@ class AiMoveRequested extends GameEvent {
   List<Object?> get props => [difficulty];
 }
 
-/// Event triggered when a game result should be recorded.
+/// Event triggered when a game result has been recorded externally.
+/// This marks the result as recorded to prevent duplicate recordings.
 class GameResultRecorded extends GameEvent {
-  final GameStatus status;
-
-  const GameResultRecorded(this.status);
-
-  @override
-  List<Object?> get props => [status];
+  const GameResultRecorded();
 }

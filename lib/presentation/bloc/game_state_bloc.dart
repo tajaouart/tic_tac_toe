@@ -10,5 +10,7 @@ class GameBlocState with _$GameBlocState {
   const factory GameBlocState.inProgress({
     required Game game,
     @Default(false) bool isAiThinking,
+    /// Tracks whether the game result has been recorded to prevent duplicates.
+    @Default(false) bool resultRecorded,
   }) = GameInProgress;
 }

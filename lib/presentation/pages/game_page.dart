@@ -17,16 +17,49 @@ class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) {
-        final bloc = getIt<GameBloc>();
-        bloc.onGameResult = (status) => _recordGameResult(context, status);
-        return bloc;
-      },
+      create: (_) => getIt<GameBloc>(),
       child: const _GamePageContent(),
     );
   }
+}
 
-  void _recordGameResult(BuildContext context, GameStatus status) {
+class _GamePageContent extends StatelessWidget {
+  const _GamePageContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: BlocConsumer<GameBloc, GameBlocState>(
+          listenWhen: (previous, current) {
+            // Listen when game ends and result hasn't been recorded yet
+            if (current is! GameInProgress) return false;
+            if (previous is! GameInProgress) return current.game.isGameOver;
+            return current.game.isGameOver &&
+                !current.resultRecorded &&
+                (previous.game.status != current.game.status);
+          },
+          listener: (context, state) {
+            if (state is! GameInProgress) return;
+            _handleGameResult(context, state.game.status);
+            // Mark result as recorded
+            context.read<GameBloc>().add(const GameResultRecorded());
+          },
+          builder: (context, state) {
+            return state.when(
+              initial: () => const Center(child: CircularProgressIndicator()),
+              inProgress: (game, isAiThinking, _) => _GameBody(
+                game: game,
+                isAiThinking: isAiThinking,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  void _handleGameResult(BuildContext context, GameStatus status) {
     final settingsCubit = context.read<SettingsCubit>();
     final soundService = getIt<SoundService>();
 
@@ -45,29 +78,6 @@ class GamePage extends StatelessWidget {
       case GameStatus.playing:
         break;
     }
-  }
-}
-
-class _GamePageContent extends StatelessWidget {
-  const _GamePageContent();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: BlocBuilder<GameBloc, GameBlocState>(
-          builder: (context, state) {
-            return state.when(
-              initial: () => const Center(child: CircularProgressIndicator()),
-              inProgress: (game, isAiThinking) => _GameBody(
-                game: game,
-                isAiThinking: isAiThinking,
-              ),
-            );
-          },
-        ),
-      ),
-    );
   }
 }
 

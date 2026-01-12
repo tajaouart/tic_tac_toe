@@ -71,27 +71,28 @@ void main() {
       },
     );
 
-    test('invokes game result callback when game ends', () async {
+    test('marks result as recorded when GameResultRecorded is added', () async {
       final bloc = GameBloc(
         makeMove: makeMove,
         resetGame: resetGame,
         getAiMove: getAiMove,
       );
 
-      GameStatus? recordedStatus;
-      bloc.onGameResult = (status) => recordedStatus = status;
-
       await Future.delayed(const Duration(milliseconds: 100));
 
+      // Simulate a game ending and result being recorded
       bloc.add(const CellTapped(index: 0, difficulty: Difficulty.easy));
       await Future.delayed(const Duration(milliseconds: 700));
-      bloc.add(const CellTapped(index: 2, difficulty: Difficulty.easy));
-      await Future.delayed(const Duration(milliseconds: 700));
 
-      final state = bloc.state as GameInProgress;
-      if (state.game.isGameOver) {
-        expect(recordedStatus, isNotNull);
-      }
+      final stateBefore = bloc.state as GameInProgress;
+      expect(stateBefore.resultRecorded, false);
+
+      // Mark result as recorded
+      bloc.add(const GameResultRecorded());
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      final stateAfter = bloc.state as GameInProgress;
+      expect(stateAfter.resultRecorded, true);
 
       await bloc.close();
     });

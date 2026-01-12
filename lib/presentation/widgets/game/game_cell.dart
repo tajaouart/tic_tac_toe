@@ -29,79 +29,33 @@ class GameCell extends StatefulWidget {
 
 class _GameCellState extends State<GameCell> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _scanAnimation;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1200),
     );
 
-    _updateAnimation();
+    // Simple pulse animation - all cells together
+    _pulseAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
 
     if (widget.isAiThinking && widget.player == Player.none) {
-      _controller.repeat();
+      _controller.repeat(reverse: true);
     }
-  }
-
-  void _updateAnimation() {
-    // Calculate when this cell should be highlighted in the scan sequence
-    final totalCells = widget.totalEmptyCells.clamp(1, 9);
-    final cellDuration = 1.0 / totalCells;
-    final startTime = widget.scanIndex * cellDuration;
-    final endTime = (startTime + cellDuration).clamp(0.0, 1.0);
-
-    // Build tween sequence with proper weights (must be > 0)
-    final List<TweenSequenceItem<double>> items = [];
-
-    // Pre-highlight delay
-    if (startTime > 0.001) {
-      items.add(TweenSequenceItem(
-        tween: Tween<double>(begin: 0.0, end: 0.0),
-        weight: startTime * 100,
-      ));
-    }
-
-    // Fade in
-    items.add(TweenSequenceItem(
-      tween: Tween<double>(begin: 0.0, end: 1.0)
-          .chain(CurveTween(curve: Curves.easeOut)),
-      weight: (cellDuration / 2) * 100,
-    ));
-
-    // Fade out
-    items.add(TweenSequenceItem(
-      tween: Tween<double>(begin: 1.0, end: 0.0)
-          .chain(CurveTween(curve: Curves.easeIn)),
-      weight: (cellDuration / 2) * 100,
-    ));
-
-    // Post-highlight delay
-    final remaining = 1.0 - endTime;
-    if (remaining > 0.001) {
-      items.add(TweenSequenceItem(
-        tween: Tween<double>(begin: 0.0, end: 0.0),
-        weight: remaining * 100,
-      ));
-    }
-
-    _scanAnimation = TweenSequence<double>(items).animate(_controller);
   }
 
   @override
   void didUpdateWidget(GameCell oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.scanIndex != oldWidget.scanIndex ||
-        widget.totalEmptyCells != oldWidget.totalEmptyCells) {
-      _updateAnimation();
-    }
-
     if (widget.isAiThinking && widget.player == Player.none) {
       if (!_controller.isAnimating) {
-        _controller.repeat();
+        _controller.repeat(reverse: true);
       }
     } else {
       _controller.stop();
@@ -118,15 +72,15 @@ class _GameCellState extends State<GameCell> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final bool showScanAnimation =
+    final bool showPulseAnimation =
         widget.isAiThinking && widget.player == Player.none;
 
     return GestureDetector(
       onTap: widget.isEnabled ? widget.onTap : null,
       child: AnimatedBuilder(
-        animation: _scanAnimation,
+        animation: _pulseAnimation,
         builder: (context, child) {
-          final scanValue = showScanAnimation ? _scanAnimation.value : 0.0;
+          final pulseValue = showPulseAnimation ? _pulseAnimation.value : 0.0;
 
           return AnimatedContainer(
             duration: const Duration(
@@ -137,24 +91,24 @@ class _GameCellState extends State<GameCell> with SingleTickerProviderStateMixin
                   ? colorScheme.primaryContainer
                   : Color.lerp(
                       colorScheme.surface,
-                      colorScheme.primary.withValues(alpha: 0.3),
-                      scanValue,
+                      colorScheme.primary.withValues(alpha: 0.15),
+                      pulseValue,
                     ),
               borderRadius: BorderRadius.circular(AppConstants.cellBorderRadius),
               border: Border.all(
                 color: Color.lerp(
                   colorScheme.outline.withValues(alpha: 0.3),
-                  colorScheme.primary,
-                  scanValue,
+                  colorScheme.primary.withValues(alpha: 0.6),
+                  pulseValue,
                 )!,
-                width: AppConstants.cellBorderWidth + (scanValue * 1.5),
+                width: AppConstants.cellBorderWidth + (pulseValue * 1.0),
               ),
-              boxShadow: scanValue > 0
+              boxShadow: pulseValue > 0
                   ? [
                       BoxShadow(
-                        color: colorScheme.primary.withValues(alpha: scanValue * 0.4),
-                        blurRadius: 12 * scanValue,
-                        spreadRadius: 2 * scanValue,
+                        color: colorScheme.primary.withValues(alpha: pulseValue * 0.2),
+                        blurRadius: 8 * pulseValue,
+                        spreadRadius: 1 * pulseValue,
                       ),
                     ]
                   : null,

@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tic_tac_toe/core/constants/app_constants.dart';
 import 'package:tic_tac_toe/core/usecases/usecase.dart';
-import 'package:tic_tac_toe/domain/entities/game_state.dart';
 import 'package:tic_tac_toe/domain/entities/player.dart';
 import 'package:tic_tac_toe/domain/usecases/get_ai_move.dart';
 import 'package:tic_tac_toe/domain/usecases/make_move.dart';

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:tic_tac_toe/domain/entities/difficulty.dart';
-import 'package:tic_tac_toe/domain/entities/game_state.dart';
 
 /// Base class for all game events.
 abstract class GameEvent extends Equatable {

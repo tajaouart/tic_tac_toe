@@ -1,0 +1,318 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Tic Tac Toe",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+
+  "player": "Player",
+  "@player": {
+    "description": "Default player name"
+  },
+
+  "cpu": "CPU",
+  "@cpu": {
+    "description": "Computer opponent name"
+  },
+
+  "vs": "VS",
+  "@vs": {
+    "description": "Versus abbreviation"
+  },
+
+  "wins": "{count} wins",
+  "@wins": {
+    "description": "Number of wins",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "yourTurn": "Your turn",
+  "@yourTurn": {
+    "description": "Status when it's player's turn"
+  },
+
+  "cpuThinking": "CPU is thinking...",
+  "@cpuThinking": {
+    "description": "Status when CPU is thinking"
+  },
+
+  "youWin": "You Win!",
+  "@youWin": {
+    "description": "Status when player wins"
+  },
+
+  "cpuWins": "CPU Wins",
+  "@cpuWins": {
+    "description": "Status when CPU wins"
+  },
+
+  "draw": "It's a Draw",
+  "@draw": {
+    "description": "Status when game is a draw"
+  },
+
+  "playAgain": "Play Again",
+  "@playAgain": {
+    "description": "Button to start a new game"
+  },
+
+  "newGame": "New Game",
+  "@newGame": {
+    "description": "Tooltip for new game button"
+  },
+
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings page title and button"
+  },
+
+  "statistics": "Statistics",
+  "@statistics": {
+    "description": "Statistics page title"
+  },
+
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile section title"
+  },
+
+  "playerName": "Player Name",
+  "@playerName": {
+    "description": "Player name setting label"
+  },
+
+  "enterYourName": "Enter your name",
+  "@enterYourName": {
+    "description": "Player name input hint"
+  },
+
+  "gameSettings": "Game Settings",
+  "@gameSettings": {
+    "description": "Game settings section title"
+  },
+
+  "difficulty": "Difficulty",
+  "@difficulty": {
+    "description": "Difficulty setting label"
+  },
+
+  "easy": "Easy",
+  "@easy": {
+    "description": "Easy difficulty level"
+  },
+
+  "medium": "Medium",
+  "@medium": {
+    "description": "Medium difficulty level"
+  },
+
+  "hard": "Hard",
+  "@hard": {
+    "description": "Hard difficulty level"
+  },
+
+  "appearance": "Appearance",
+  "@appearance": {
+    "description": "Appearance section title"
+  },
+
+  "theme": "Theme",
+  "@theme": {
+    "description": "Theme setting label"
+  },
+
+  "system": "System",
+  "@system": {
+    "description": "System theme option"
+  },
+
+  "light": "Light",
+  "@light": {
+    "description": "Light theme option"
+  },
+
+  "dark": "Dark",
+  "@dark": {
+    "description": "Dark theme option"
+  },
+
+  "language": "Language",
+  "@language": {
+    "description": "Language setting label"
+  },
+
+  "english": "English",
+  "@english": {
+    "description": "English language option"
+  },
+
+  "french": "French",
+  "@french": {
+    "description": "French language option"
+  },
+
+  "sound": "Sound",
+  "@sound": {
+    "description": "Sound setting label"
+  },
+
+  "soundEffects": "Sound Effects",
+  "@soundEffects": {
+    "description": "Sound effects setting description"
+  },
+
+  "dangerZone": "Danger Zone",
+  "@dangerZone": {
+    "description": "Danger zone section title"
+  },
+
+  "resetStatistics": "Reset Statistics",
+  "@resetStatistics": {
+    "description": "Reset statistics button"
+  },
+
+  "resetStatisticsDescription": "Clear all your game history",
+  "@resetStatisticsDescription": {
+    "description": "Reset statistics description"
+  },
+
+  "confirmReset": "Confirm Reset",
+  "@confirmReset": {
+    "description": "Confirm reset dialog title"
+  },
+
+  "resetConfirmationMessage": "Are you sure you want to reset all statistics? This action cannot be undone.",
+  "@resetConfirmationMessage": {
+    "description": "Reset confirmation message"
+  },
+
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+
+  "reset": "Reset",
+  "@reset": {
+    "description": "Reset button"
+  },
+
+  "gamesPlayed": "Games Played",
+  "@gamesPlayed": {
+    "description": "Games played statistic label"
+  },
+
+  "winsLabel": "Wins",
+  "@winsLabel": {
+    "description": "Wins statistic label"
+  },
+
+  "lossesLabel": "Losses",
+  "@lossesLabel": {
+    "description": "Losses statistic label"
+  },
+
+  "drawsLabel": "Draws",
+  "@drawsLabel": {
+    "description": "Draws statistic label"
+  },
+
+  "winRate": "Win Rate",
+  "@winRate": {
+    "description": "Win rate statistic label"
+  },
+
+  "currentStreak": "Current Streak",
+  "@currentStreak": {
+    "description": "Current streak statistic label"
+  },
+
+  "bestStreak": "Best Streak",
+  "@bestStreak": {
+    "description": "Best streak statistic label"
+  },
+
+  "overview": "Overview",
+  "@overview": {
+    "description": "Overview section title"
+  },
+
+  "performance": "Performance",
+  "@performance": {
+    "description": "Performance section title"
+  },
+
+  "noGamesYet": "No games played yet",
+  "@noGamesYet": {
+    "description": "Message when no games have been played"
+  },
+
+  "startPlaying": "Start playing to see your statistics!",
+  "@startPlaying": {
+    "description": "Encouragement to start playing"
+  },
+
+  "totalGames": "Total games: {count}",
+  "@totalGames": {
+    "description": "Total games played label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "champion": "Tic Tac Toe Champion",
+  "@champion": {
+    "description": "Player title/subtitle"
+  },
+
+  "selectDifficulty": "Select Difficulty",
+  "@selectDifficulty": {
+    "description": "Difficulty dialog title"
+  },
+
+  "changeName": "Change Name",
+  "@changeName": {
+    "description": "Change name dialog title"
+  },
+
+  "name": "Name",
+  "@name": {
+    "description": "Name input label"
+  },
+
+  "save": "Save",
+  "@save": {
+    "description": "Save button"
+  },
+
+  "selectTheme": "Select Theme",
+  "@selectTheme": {
+    "description": "Theme dialog title"
+  },
+
+  "statisticsReset": "Statistics reset",
+  "@statisticsReset": {
+    "description": "Statistics reset confirmation message"
+  },
+
+  "easyDescription": "Random moves, perfect for beginners",
+  "@easyDescription": {
+    "description": "Easy difficulty description"
+  },
+
+  "mediumDescription": "Mix of strategy and random moves",
+  "@mediumDescription": {
+    "description": "Medium difficulty description"
+  },
+
+  "hardDescription": "Optimal strategy, nearly unbeatable",
+  "@hardDescription": {
+    "description": "Hard difficulty description"
+  }
+}

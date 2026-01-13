@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/l10n/generated/app_localizations.dart';
 import 'package:tic_tac_toe/domain/entities/game_statistics.dart';
 
 /// Card widget displaying current and best winning streaks.
@@ -12,6 +13,8 @@ class StreakCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -19,7 +22,7 @@ class StreakCard extends StatelessWidget {
           children: [
             Expanded(
               child: _StreakItem(
-                title: 'Current Streak',
+                title: l10n.currentStreak,
                 value: statistics.currentStreak,
                 icon: Icons.local_fire_department,
               ),
@@ -31,7 +34,7 @@ class StreakCard extends StatelessWidget {
             ),
             Expanded(
               child: _StreakItem(
-                title: 'Best Streak',
+                title: l10n.bestStreak,
                 value: statistics.bestStreak,
                 icon: Icons.star,
               ),

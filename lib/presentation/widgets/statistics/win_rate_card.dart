@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/l10n/generated/app_localizations.dart';
 import 'package:tic_tac_toe/domain/entities/game_statistics.dart';
 
 /// Card widget displaying win rate with a progress indicator.
@@ -39,11 +40,13 @@ class _WinRateHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Win Rate',
+          l10n.winRate,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         Text(
@@ -83,8 +86,10 @@ class _TotalGamesLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Text(
-      'Total games: $totalGames',
+      l10n.totalGames(totalGames),
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: Theme.of(context).colorScheme.outline,
           ),

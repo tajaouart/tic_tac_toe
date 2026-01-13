@@ -22,6 +22,9 @@ mixin _$UserSettings {
   ThemeMode get themeMode => throw _privateConstructorUsedError;
   bool get soundEnabled => throw _privateConstructorUsedError;
 
+  /// Locale code (e.g., 'en', 'fr'). Null means system default.
+  String? get localeCode => throw _privateConstructorUsedError;
+
   /// Create a copy of UserSettings
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -41,6 +44,7 @@ abstract class $UserSettingsCopyWith<$Res> {
     Difficulty difficulty,
     ThemeMode themeMode,
     bool soundEnabled,
+    String? localeCode,
   });
 }
 
@@ -63,6 +67,7 @@ class _$UserSettingsCopyWithImpl<$Res, $Val extends UserSettings>
     Object? difficulty = null,
     Object? themeMode = null,
     Object? soundEnabled = null,
+    Object? localeCode = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -82,6 +87,10 @@ class _$UserSettingsCopyWithImpl<$Res, $Val extends UserSettings>
                 ? _value.soundEnabled
                 : soundEnabled // ignore: cast_nullable_to_non_nullable
                       as bool,
+            localeCode: freezed == localeCode
+                ? _value.localeCode
+                : localeCode // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -102,6 +111,7 @@ abstract class _$$UserSettingsImplCopyWith<$Res>
     Difficulty difficulty,
     ThemeMode themeMode,
     bool soundEnabled,
+    String? localeCode,
   });
 }
 
@@ -123,6 +133,7 @@ class __$$UserSettingsImplCopyWithImpl<$Res>
     Object? difficulty = null,
     Object? themeMode = null,
     Object? soundEnabled = null,
+    Object? localeCode = freezed,
   }) {
     return _then(
       _$UserSettingsImpl(
@@ -142,6 +153,10 @@ class __$$UserSettingsImplCopyWithImpl<$Res>
             ? _value.soundEnabled
             : soundEnabled // ignore: cast_nullable_to_non_nullable
                   as bool,
+        localeCode: freezed == localeCode
+            ? _value.localeCode
+            : localeCode // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -155,6 +170,7 @@ class _$UserSettingsImpl extends _UserSettings {
     this.difficulty = Difficulty.hard,
     this.themeMode = ThemeMode.system,
     this.soundEnabled = true,
+    this.localeCode,
   }) : super._();
 
   @override
@@ -170,9 +186,13 @@ class _$UserSettingsImpl extends _UserSettings {
   @JsonKey()
   final bool soundEnabled;
 
+  /// Locale code (e.g., 'en', 'fr'). Null means system default.
+  @override
+  final String? localeCode;
+
   @override
   String toString() {
-    return 'UserSettings(playerName: $playerName, difficulty: $difficulty, themeMode: $themeMode, soundEnabled: $soundEnabled)';
+    return 'UserSettings(playerName: $playerName, difficulty: $difficulty, themeMode: $themeMode, soundEnabled: $soundEnabled, localeCode: $localeCode)';
   }
 
   @override
@@ -187,12 +207,20 @@ class _$UserSettingsImpl extends _UserSettings {
             (identical(other.themeMode, themeMode) ||
                 other.themeMode == themeMode) &&
             (identical(other.soundEnabled, soundEnabled) ||
-                other.soundEnabled == soundEnabled));
+                other.soundEnabled == soundEnabled) &&
+            (identical(other.localeCode, localeCode) ||
+                other.localeCode == localeCode));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, playerName, difficulty, themeMode, soundEnabled);
+  int get hashCode => Object.hash(
+    runtimeType,
+    playerName,
+    difficulty,
+    themeMode,
+    soundEnabled,
+    localeCode,
+  );
 
   /// Create a copy of UserSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -209,6 +237,7 @@ abstract class _UserSettings extends UserSettings {
     final Difficulty difficulty,
     final ThemeMode themeMode,
     final bool soundEnabled,
+    final String? localeCode,
   }) = _$UserSettingsImpl;
   const _UserSettings._() : super._();
 
@@ -220,6 +249,10 @@ abstract class _UserSettings extends UserSettings {
   ThemeMode get themeMode;
   @override
   bool get soundEnabled;
+
+  /// Locale code (e.g., 'en', 'fr'). Null means system default.
+  @override
+  String? get localeCode;
 
   /// Create a copy of UserSettings
   /// with the given fields replaced by the non-null parameter values.

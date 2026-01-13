@@ -67,6 +67,11 @@ class SettingsCubit extends Cubit<SettingsState> {
     await _saveSettings(newSettings);
   }
 
+  Future<void> updateLocale(String? localeCode) async {
+    final newSettings = state.settings.copyWith(localeCode: localeCode);
+    await _saveSettings(newSettings);
+  }
+
   Future<void> _saveSettings(UserSettings newSettings) async {
     final previousSettings = state.settings;
     emit(state.copyWith(settings: newSettings, isLoading: true));

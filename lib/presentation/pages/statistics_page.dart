@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tic_tac_toe/l10n/generated/app_localizations.dart';
 import 'package:tic_tac_toe/presentation/bloc/settings_cubit.dart';
 import 'package:tic_tac_toe/presentation/widgets/statistics/player_card.dart';
 import 'package:tic_tac_toe/presentation/widgets/statistics/stats_grid.dart';
@@ -12,9 +13,11 @@ class StatisticsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Statistics'),
+        title: Text(l10n.statistics),
         centerTitle: true,
       ),
       body: BlocBuilder<SettingsCubit, SettingsState>(

@@ -3,7 +3,7 @@
 A Flutter implementation of the classic Tic-Tac-Toe game with Human vs CPU gameplay.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/tajaouart/tic_tac_toe/main/demo.png" alt="Tic Tac Toe Demo" width="300"/>
+  <img src="https://raw.githubusercontent.com/tajaouart/tic_tac_toe/main/screenshot.png" alt="Tic Tac Toe Screenshot" width="300"/>
 </p>
 
 ## Features
@@ -15,6 +15,7 @@ A Flutter implementation of the classic Tic-Tac-Toe game with Human vs CPU gamep
 - **Settings Page**: Configure difficulty, theme, and player name
 - **Clean Material 3 UI**: Modern design with animations
 - **Dark Mode Support**: System, light, or dark theme
+- **Multi-language Support**: English and French with flag selector
 - **Responsive Layout**: Works on mobile, tablet, and web
 
 ## Architecture
@@ -51,6 +52,7 @@ lib/
 - **Navigation**: go_router
 - **Local Storage**: shared_preferences
 - **Code Generation**: freezed, injectable_generator
+- **Internationalization**: flutter_localizations, intl (ARB files)
 - **Architecture Pattern**: Clean Architecture with BLoC
 
 ## Getting Started
@@ -90,6 +92,7 @@ flutter run
 - Change player name
 - Select difficulty level
 - Choose theme (System/Light/Dark)
+- Change language (English/French)
 - Reset statistics
 
 ## AI Implementation

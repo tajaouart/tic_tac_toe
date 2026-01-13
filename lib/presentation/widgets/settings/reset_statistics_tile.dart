@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/l10n/generated/app_localizations.dart';
 import 'package:tic_tac_toe/presentation/widgets/common/confirmation_dialog.dart';
 
 /// Tile widget for resetting game statistics.
@@ -12,24 +13,28 @@ class ResetStatisticsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return ListTile(
       leading: const Icon(Icons.delete_outline),
-      title: const Text('Reset Statistics'),
-      subtitle: const Text('Clear all game history'),
+      title: Text(l10n.resetStatistics),
+      subtitle: Text(l10n.resetStatisticsDescription),
       onTap: () => _showResetConfirmation(context),
     );
   }
 
   void _showResetConfirmation(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     ConfirmationDialog.show(
       context: context,
-      title: 'Reset Statistics',
-      content: 'This will permanently delete all your game history. This action cannot be undone.',
-      confirmLabel: 'Reset',
+      title: l10n.confirmReset,
+      content: l10n.resetConfirmationMessage,
+      confirmLabel: l10n.reset,
       onConfirm: () {
         onReset();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Statistics reset')),
+          SnackBar(content: Text(l10n.statisticsReset)),
         );
       },
     );

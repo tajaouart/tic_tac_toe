@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/l10n/generated/app_localizations.dart';
 
 /// Tile widget for displaying and editing the player name.
 class PlayerNameTile extends StatelessWidget {
@@ -13,26 +14,29 @@ class PlayerNameTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return ListTile(
       leading: const Icon(Icons.person_outline),
-      title: const Text('Player Name'),
+      title: Text(l10n.playerName),
       subtitle: Text(currentName),
       onTap: () => _showNameDialog(context),
     );
   }
 
   void _showNameDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final controller = TextEditingController(text: currentName);
 
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Change Name'),
+        title: Text(l10n.changeName),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(
-            labelText: 'Name',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: l10n.name,
+            border: const OutlineInputBorder(),
           ),
           autofocus: true,
           textCapitalization: TextCapitalization.words,
@@ -40,7 +44,7 @@ class PlayerNameTile extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () {
@@ -50,7 +54,7 @@ class PlayerNameTile extends StatelessWidget {
               }
               Navigator.pop(dialogContext);
             },
-            child: const Text('Save'),
+            child: Text(l10n.save),
           ),
         ],
       ),

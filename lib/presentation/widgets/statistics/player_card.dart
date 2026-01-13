@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/l10n/generated/app_localizations.dart';
 
 /// Card widget displaying player profile information.
 class PlayerCard extends StatelessWidget {
@@ -57,6 +58,8 @@ class _PlayerInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -67,7 +70,7 @@ class _PlayerInfo extends StatelessWidget {
               ),
         ),
         Text(
-          'Tic Tac Toe Champion',
+          l10n.champion,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.outline,
               ),

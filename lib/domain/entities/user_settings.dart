@@ -13,6 +13,8 @@ class UserSettings with _$UserSettings {
     @Default(Difficulty.hard) Difficulty difficulty,
     @Default(ThemeMode.system) ThemeMode themeMode,
     @Default(true) bool soundEnabled,
+    /// Locale code (e.g., 'en', 'fr'). Null means system default.
+    String? localeCode,
   }) = _UserSettings;
 
   Map<String, dynamic> toJson() {
@@ -21,6 +23,7 @@ class UserSettings with _$UserSettings {
       'difficulty': difficulty.name,
       'themeMode': themeMode.name,
       'soundEnabled': soundEnabled,
+      'localeCode': localeCode,
     };
   }
 
@@ -30,7 +33,15 @@ class UserSettings with _$UserSettings {
       difficulty: _parseDifficulty(json['difficulty']),
       themeMode: _parseThemeMode(json['themeMode']),
       soundEnabled: json['soundEnabled'] ?? true,
+      localeCode: _parseLocaleCode(json['localeCode']),
     );
+  }
+
+  static String? _parseLocaleCode(dynamic value) {
+    if (value is String && (value == 'en' || value == 'fr')) {
+      return value;
+    }
+    return null; // System default
   }
 
   static String _parsePlayerName(dynamic value) {

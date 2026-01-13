@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tic_tac_toe/l10n/generated/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tic_tac_toe/data/services/sound_service.dart';
 import 'package:tic_tac_toe/domain/entities/difficulty.dart';
@@ -142,6 +143,8 @@ class _GameBody extends StatelessWidget {
   }
 
   Widget _buildTopBar(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
       child: Row(
@@ -149,18 +152,18 @@ class _GameBody extends StatelessWidget {
           IconButton(
             onPressed: () => context.read<GameBloc>().add(const GameReset()),
             icon: const Icon(Icons.refresh_rounded),
-            tooltip: 'New Game',
+            tooltip: l10n.newGame,
           ),
           const Spacer(),
           IconButton(
             onPressed: () => context.push('/statistics'),
             icon: const Icon(Icons.emoji_events_outlined),
-            tooltip: 'Statistics',
+            tooltip: l10n.statistics,
           ),
           IconButton(
             onPressed: () => context.push('/settings'),
             icon: const Icon(Icons.settings_outlined),
-            tooltip: 'Settings',
+            tooltip: l10n.settings,
           ),
         ],
       ),
@@ -214,7 +217,7 @@ class _GameBody extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      'VS',
+                      AppLocalizations.of(context).vs,
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -365,7 +368,7 @@ class _GameBody extends StatelessWidget {
 
         // Score
         Text(
-          '$score wins',
+          AppLocalizations.of(context).wins(score),
           style: TextStyle(
             fontSize: 12,
             color: colorScheme.outline,
@@ -376,29 +379,30 @@ class _GameBody extends StatelessWidget {
   }
 
   Widget _buildStatusChip(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context);
     final (text, color, icon) = switch (game.status) {
       GameStatus.playing when isAiThinking => (
-          'CPU is thinking...',
+          l10n.cpuThinking,
           colorScheme.tertiary,
           null,
         ),
       GameStatus.playing => (
-          'Your turn',
+          l10n.yourTurn,
           colorScheme.primary,
           Icons.touch_app_rounded,
         ),
       GameStatus.xWins => (
-          '🎉 You Win!',
+          '🎉 ${l10n.youWin}',
           Colors.green,
           Icons.celebration_rounded,
         ),
       GameStatus.oWins => (
-          'CPU Wins',
+          l10n.cpuWins,
           colorScheme.error,
           Icons.smart_toy_rounded,
         ),
       GameStatus.draw => (
-          "It's a Draw",
+          l10n.draw,
           colorScheme.outline,
           Icons.handshake_rounded,
         ),
@@ -483,6 +487,7 @@ class _GameBody extends StatelessWidget {
   }
 
   Widget _buildGameOverActions(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Row(
@@ -491,7 +496,7 @@ class _GameBody extends StatelessWidget {
         FilledButton.icon(
           onPressed: () => context.read<GameBloc>().add(const GameReset()),
           icon: const Icon(Icons.replay_rounded),
-          label: const Text('Play Again'),
+          label: Text(l10n.playAgain),
           style: FilledButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
             shape: RoundedRectangleBorder(
@@ -503,7 +508,7 @@ class _GameBody extends StatelessWidget {
         OutlinedButton.icon(
           onPressed: () => context.push('/settings'),
           icon: const Icon(Icons.tune_rounded),
-          label: const Text('Settings'),
+          label: Text(l10n.settings),
           style: OutlinedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             shape: RoundedRectangleBorder(

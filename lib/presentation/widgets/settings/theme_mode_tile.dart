@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/l10n/generated/app_localizations.dart';
 
 /// Tile widget for selecting the app theme mode.
 class ThemeModeTile extends StatelessWidget {
@@ -11,14 +12,15 @@ class ThemeModeTile extends StatelessWidget {
     required this.onChanged,
   });
 
-  String _getModeName(ThemeMode mode) {
+  String _getModeName(BuildContext context, ThemeMode mode) {
+    final l10n = AppLocalizations.of(context);
     switch (mode) {
       case ThemeMode.system:
-        return 'System';
+        return l10n.system;
       case ThemeMode.light:
-        return 'Light';
+        return l10n.light;
       case ThemeMode.dark:
-        return 'Dark';
+        return l10n.dark;
     }
   }
 
@@ -35,10 +37,12 @@ class ThemeModeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return ListTile(
       leading: const Icon(Icons.palette_outlined),
-      title: const Text('Theme'),
-      subtitle: Text(_getModeName(currentMode)),
+      title: Text(l10n.theme),
+      subtitle: Text(_getModeName(context, currentMode)),
       onTap: () => _showThemeDialog(context),
     );
   }
@@ -52,7 +56,7 @@ class ThemeModeTile extends StatelessWidget {
           onChanged(mode);
           Navigator.pop(dialogContext);
         },
-        getModeName: _getModeName,
+        getModeName: (mode) => _getModeName(context, mode),
         getModeIcon: _getModeIcon,
       ),
     );
@@ -87,8 +91,10 @@ class _ThemeModeDialogState extends State<_ThemeModeDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AlertDialog(
-      title: const Text('Select Theme'),
+      title: Text(l10n.selectTheme),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: ThemeMode.values.map((mode) {

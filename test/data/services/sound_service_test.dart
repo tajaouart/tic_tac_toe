@@ -29,7 +29,7 @@ void main() {
     when(() => mockSuccessPlayer.dispose()).thenAnswer((_) async {});
     when(() => mockLostPlayer.dispose()).thenAnswer((_) async {});
 
-    soundService = SoundService(
+    soundService = SoundService.test(
       tapPlayer: mockTapPlayer,
       successPlayer: mockSuccessPlayer,
       lostPlayer: mockLostPlayer,

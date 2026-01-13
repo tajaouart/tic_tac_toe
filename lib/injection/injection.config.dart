@@ -36,7 +36,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.prefs,
       preResolve: true,
     );
-    gh.lazySingleton<_i228.SoundService>(() => _i228.SoundService());
+    gh.lazySingleton<_i228.SoundService>(() => _i228.SoundService.create());
     gh.lazySingleton<_i1045.StorageService>(
       () => _i1045.StorageService(gh<_i460.SharedPreferences>()),
     );

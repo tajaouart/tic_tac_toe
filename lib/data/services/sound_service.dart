@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:injectable/injectable.dart';
 
 /// Service for playing game sound effects.
@@ -15,13 +16,25 @@ class SoundService {
   /// Whether sounds are currently enabled.
   bool get isEnabled => _isEnabled;
 
-  SoundService({
-    AudioPlayer? tapPlayer,
-    AudioPlayer? successPlayer,
-    AudioPlayer? lostPlayer,
-  })  : _tapPlayer = tapPlayer ?? AudioPlayer(),
-        _successPlayer = successPlayer ?? AudioPlayer(),
-        _lostPlayer = lostPlayer ?? AudioPlayer();
+  /// Creates a SoundService with default AudioPlayer instances.
+  @factoryMethod
+  static SoundService create() => SoundService._();
+
+  /// Internal constructor for production use.
+  SoundService._()
+      : _tapPlayer = AudioPlayer(),
+        _successPlayer = AudioPlayer(),
+        _lostPlayer = AudioPlayer();
+
+  /// Test constructor that accepts mock AudioPlayer instances.
+  @visibleForTesting
+  SoundService.test({
+    required AudioPlayer tapPlayer,
+    required AudioPlayer successPlayer,
+    required AudioPlayer lostPlayer,
+  })  : _tapPlayer = tapPlayer,
+        _successPlayer = successPlayer,
+        _lostPlayer = lostPlayer;
 
   /// Sets whether sounds are enabled.
   void setEnabled(bool enabled) {
